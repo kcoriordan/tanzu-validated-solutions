@@ -1,10 +1,10 @@
-# Greenplum Backup and Restore
+# Tanzu Greenplum Backup and Restore
 
 ## Overview
 
-vSAN protects the data against hardware failure in place ([Storage Architecture - vSAN & vSAN Storage Cluster](./storage-architecture.md#storage-architecture-vsan-vsan-storage-cluster)), but it cannot protect against logical or human error, or against total loss of the cluster or rack, because it replicates a mistaken deletion as faithfully as good data. Backup and restore is the layer that covers those gaps, and it is the mechanism behind the DR escalation paths in the [Storage Failure Behavior: Physical Disk Failure](./storage-architecture.md#storage-failure-behavior-physical-disk-failure) and [Rack Design for Greenplum Clusters](./rack-design.md#rack-design-for-greenplum-clusters) sections. The two layers are complementary; neither replaces the other.
+vSAN protects the data against hardware failure in place ([Storage Architecture - vSAN & vSAN Storage Cluster](./storage-architecture.md#storage-architecture-vsan-vsan-storage-cluster)), but it cannot protect against logical or human error, or against total loss of the cluster or rack, because it replicates a mistaken deletion as faithfully as good data. Backup and restore is the layer that covers those gaps, and it is the mechanism behind the DR escalation paths in the [Storage Failure Behavior: Physical Disk Failure](./storage-architecture.md#storage-failure-behavior-physical-disk-failure) and [Rack Design for Tanzu Greenplum Clusters](./rack-design.md#rack-design-for-tanzu-greenplum-clusters) sections. The two layers are complementary; neither replaces the other.
 
-Greenplum uses a parallel, MPP-aware framework, `gpbackup` and `gprestore`, in which the coordinator captures metadata while every segment writes its own slice of data in parallel, to local storage or a storage plugin. This scales with the cluster instead of bottlenecking on the coordinator, which is why it is the method used throughout this architecture. The non-parallel `pg_dump` utilities route everything through the coordinator and are special-case only.
+Tanzu Greenplum uses a parallel, MPP-aware framework, `gpbackup` and `gprestore`, in which the coordinator captures metadata while every segment writes its own slice of data in parallel, to local storage or a storage plugin. This scales with the cluster instead of bottlenecking on the coordinator, which is why it is the method used throughout this architecture. The non-parallel `pg_dump` utilities route everything through the coordinator and are special-case only.
 
 Command syntax and configuration beyond the workflows shown here are in the Tanzu Greenplum Backup and Restore documentation.
 
@@ -35,24 +35,24 @@ Two rules govern incremental sets and are treated as constraints:
 
 On restore, `gprestore` resolves the chain from a single target timestamp: it restores each append-optimized table from its most recent version in the set and heap tables from the latest backup.
 
-### Understanding Table Storage in Greenplum 7: Heap vs. AO
+### Understanding Table Storage in Tanzu Greenplum 7: Heap vs. AO
 
-To understand how backups behave, one must first understand Greenplum's two underlying storage engine formats: Heap and Append-Optimized (AO).
+To understand how backups behave, one must first understand Tanzu Greenplum's two underlying storage engine formats: Heap and Append-Optimized (AO).
 
 | Feature | Heap Tables (Row-Store) | Append-Optimized (AO) Tables |
 | :---- | :---- | :---- |
 | Primary Use Case | Small lookup tables, metadata, operational tables with frequent UPDATE/DELETE. | Large fact tables, data warehouse historical logs, bulk INSERT workloads. |
-| Storage Mechanism | Standard PostgreSQL 8 KB pages.  | Custom Greenplum block storage. Data is appended sequentially to file segments. |
-| Greenplum 7 Syntax | Default, or CREATE TABLE ... USING heap; | CREATE TABLE ... WITH (appendonly=true); (Or GP7 syntax: USING ao_row / USING ao_column) |
+| Storage Mechanism | Standard PostgreSQL 8 KB pages.  | Custom Tanzu Greenplum block storage. Data is appended sequentially to file segments. |
+| Tanzu Greenplum 7 Syntax | Default, or CREATE TABLE ... USING heap; | CREATE TABLE ... WITH (appendonly=true); (Or GP7 syntax: USING ao_row / USING ao_column) |
 | Incremental Backup Behavior | ALWAYS backed up 100% in full. | Backed up incrementally. Only changed AO file segments/partitions are copied. |
 
 **What does `APPENDONLY=TRUE` do under the hood?**
 
-When a database developer or admin creates a table with `WITH (appendonly=true)` (or `USING ao_row` / `USING ao_column` in Greenplum 7), it tells the database engine to:
+When a database developer or admin creates a table with `WITH (appendonly=true)` (or `USING ao_row` / `USING ao_column` in Tanzu Greenplum 7), it tells the database engine to:
 
 * Bypass standard PostgreSQL row editing: Data blocks are written sequentially. Modifying data does not overwrite existing disk blocks; instead, changes are appended as new segment files or tracked in visibility maps.  
 * Enable Compression & Columnar Storage: It opens up options for heavy compression algorithms (for example, `zstd, zlib`) and columnar layouts (`orientation=column`), drastically reducing S3/disk footprint.  
-* Enable Backup Modification Tracking: Greenplum maintains explicit metadata maps for AO segment files. This metadata allows `gpbackup` to instantly query: "Has this specific table or partition changed since Timestamp X?"
+* Enable Backup Modification Tracking: Tanzu Greenplum maintains explicit metadata maps for AO segment files. This metadata allows `gpbackup` to instantly query: "Has this specific table or partition changed since Timestamp X?"
 
 Because Heap tables lack this sequential block modification map, `gpbackup` cannot determine which individual Heap pages changed. Therefore, every "incremental" backup silently performs a 100% full dump of all Heap tables.
 
@@ -125,7 +125,7 @@ For any restore to succeed, the destination must meet the following. This is the
 
 | Prerequisite | Requirement | Must match the source? |
 | :---- | :---- | :---- |
-| Greenplum major version | Same major version as the backup | Yes. Cross-version is a migration capability, not a DR path. |
+| Tanzu Greenplum major version | Same major version as the backup | Yes. Cross-version is a migration capability, not a DR path. |
 | Backup/restore tooling | Recent enough to support the operation (resize restore needs current tooling) | Yes (version floor) |
 | Storage capacity | Enough to hold the restored data | Adequate, not identical |
 | Compute / memory | Enough to run the workload, sized per [vSphere Cluster and Compute Design](./vsphere-cluster-design.md#vsphere-cluster-and-compute-design) and [Storage Architecture - vSAN & vSAN Storage Cluster](./storage-architecture.md#storage-architecture-vsan-vsan-storage-cluster) | Adequate, not identical |

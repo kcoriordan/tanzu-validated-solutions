@@ -1,68 +1,68 @@
 # Virtual Distributed Switch (vDS) Design
 
-This section defines how virtual networking is built for the Greenplum vSphere cluster using a dedicated vSphere Distributed Switch (vDS) and VLAN-backed port groups. It explains how each traffic class (interconnect, vSAN, client, management, vMotion, and data operations) is isolated, and how uplinks and teaming policies are chosen to give the latency-critical flows deterministic, low-jitter paths that hold up under contention.
+This section defines how virtual networking is built for the Tanzu Greenplum vSphere cluster using a dedicated vSphere Distributed Switch (vDS) and VLAN-backed port groups. It explains how each traffic class (interconnect, vSAN, client, management, vMotion, and data operations) is isolated, and how uplinks and teaming policies are chosen to give the latency-critical flows deterministic, low-jitter paths that hold up under contention.
 
-The design is written so that an administrator with general vSphere knowledge can implement the prescribed port groups, VLANs, and NIC mappings without needing Greenplum-specific expertise. The reasoning behind each choice traces back to the network characteristics established in [Network Traffic Characteristics](./workload-characteristics.md#network-traffic-characteristics).
+The design is written so that an administrator with general vSphere knowledge can implement the prescribed port groups, VLANs, and NIC mappings without needing Tanzu Greenplum-specific expertise. The reasoning behind each choice traces back to the network characteristics established in [Network Traffic Characteristics](./workload-characteristics.md#network-traffic-characteristics).
 
 ## Design Objectives
 
-Greenplum is a shared-nothing MPP system that generates intense east-west traffic between segment hosts and is highly sensitive to latency variance and packet loss, as established in [Network Traffic Characteristics](./workload-characteristics.md#network-traffic-characteristics). The virtual network must therefore:
+Tanzu Greenplum is a shared-nothing MPP system that generates intense east-west traffic between segment hosts and is highly sensitive to latency variance and packet loss, as established in [Network Traffic Characteristics](./workload-characteristics.md#network-traffic-characteristics). The virtual network must therefore:
 
 * Provide deterministic packet paths and predictable failover behavior, so motion traffic follows a known route and does not shift underneath a running query.  
 * Minimize processing overhead and avoid the jitter that dynamic, load-based teaming can introduce.  
 * Isolate the latency-critical interconnect and storage traffic from the less critical flows, so that management, vMotion, or ETL activity can never contend with motion operators or vSAN I/O.
 
-For these reasons the architecture uses a vSphere Distributed Switch with VLAN-backed networks for all Greenplum and vSAN traffic, and keeps overlay networking off the Greenplum data path. The next section explains that choice in relation to NSX, which is a capable alternative.
+For these reasons the architecture uses a vSphere Distributed Switch with VLAN-backed networks for all Tanzu Greenplum and vSAN traffic, and keeps overlay networking off the Tanzu Greenplum data path. The next section explains that choice in relation to NSX, which is a capable alternative.
 
 ## Networking Technology Choice - vDS or NSX
 
-Both vDS with VLAN-backed port groups and NSX overlay networking are valid, fully supported ways to build the network for Greenplum on vSphere. They optimize for different things, and the right choice depends on what the surrounding environment needs.
+Both vDS with VLAN-backed port groups and NSX overlay networking are valid, fully supported ways to build the network for Tanzu Greenplum on vSphere. They optimize for different things, and the right choice depends on what the surrounding environment needs.
 
 **Where NSX is a strong fit.** NSX brings capabilities that a plain vDS does not: distributed firewalling and micro-segmentation, multi-tenant network isolation, automation through a rich API, and consistent logical networking that spans clusters and sites. 
 
-In an environment that is already standardized on NSX, or where Greenplum sits inside a larger multi-tenant SDDC with security-segmentation requirements, running Greenplum on NSX is a reasonable and well-supported design. The operational consistency of managing one network model across the whole estate can outweigh a modest data-path cost.
+In an environment that is already standardized on NSX, or where Tanzu Greenplum sits inside a larger multi-tenant SDDC with security-segmentation requirements, running Tanzu Greenplum on NSX is a reasonable and well-supported design. The operational consistency of managing one network model across the whole estate can outweigh a modest data-path cost.
 
-**Why does this architecture use vDS.** The consideration that dominates for the Greenplum data path is deterministic, low-jitter east-west performance. NSX overlays using Geneve add per-packet encapsulation and decapsulation, an extra processing stage in the hypervisor datapath, and additional logical hops. For most workloads that overhead is negligible and well worth the features it buys. For the Greenplum interconnect specifically, which is bursty, highly parallel, and sensitive to jitter and tail latency during motion operators, the simplest possible path is the most predictable one. A VLAN-backed vDS gives exactly that:
+**Why does this architecture use vDS.** The consideration that dominates for the Tanzu Greenplum data path is deterministic, low-jitter east-west performance. NSX overlays using Geneve add per-packet encapsulation and decapsulation, an extra processing stage in the hypervisor datapath, and additional logical hops. For most workloads that overhead is negligible and well worth the features it buys. For the Tanzu Greenplum interconnect specifically, which is bursty, highly parallel, and sensitive to jitter and tail latency during motion operators, the simplest possible path is the most predictable one. A VLAN-backed vDS gives exactly that:
 
 * The lowest packet-processing overhead, with no encapsulation or decapsulation on the data path.  
 * Fewer buffering and queueing points between segments.  
 * Predictable latency and drop behavior under bursty motion load.
 
-**The decision for this document.** This reference architecture uses a vSphere Distributed Switch with VLAN-backed port groups and end-to-end jumbo frames (MTU 9000) for all Greenplum traffic and all vSAN client traffic. Where NSX is present in the broader SDDC, it is reserved for non-Greenplum workloads on this platform. NSX is best understood here as the second choice for the Greenplum data path: fully capable and the right answer when its segmentation and multi-tenancy features are required, but carrying an overlay cost that a dedicated, single-tenant Greenplum cluster does not need to pay. 
+**The decision for this document.** This reference architecture uses a vSphere Distributed Switch with VLAN-backed port groups and end-to-end jumbo frames (MTU 9000) for all Tanzu Greenplum traffic and all vSAN client traffic. Where NSX is present in the broader SDDC, it is reserved for non-Tanzu Greenplum workloads on this platform. NSX is best understood here as the second choice for the Tanzu Greenplum data path: fully capable and the right answer when its segmentation and multi-tenancy features are required, but carrying an overlay cost that a dedicated, single-tenant Tanzu Greenplum cluster does not need to pay. 
 
-## vSphere Distributed Switch Design for Greenplum
+## vSphere Distributed Switch Design for Tanzu Greenplum
 
-This diagram shows the vSphere Distributed Switch (vDS) design used to support Greenplum workloads. The design follows a multi-NIC, multi-VLAN model to provide bandwidth isolation, fault tolerance, and scalability across management, storage, and database traffic. More details on the NIC Mapping and Traffic control is discussed in further sections.
+This diagram shows the vSphere Distributed Switch (vDS) design used to support Tanzu Greenplum workloads. The design follows a multi-NIC, multi-VLAN model to provide bandwidth isolation, fault tolerance, and scalability across management, storage, and database traffic. More details on the NIC Mapping and Traffic control is discussed in further sections.
 
-![vSphere Distributed Switch (vDS) design for Greenplum](./images/vds-design-for-greenplum.png)
+![vSphere Distributed Switch (vDS) design for Tanzu Greenplum](./images/vds-design-for-greenplum.png)
 
 The vDS implementation follows these core principles: 
 
 * Centralized Network Management   
   All VLANs, port groups, and traffic classes are consistently defined and enforced across the cluster.   
 * Traffic Isolation by Design   
-  Each Greenplum traffic type is mapped to a dedicated port group, ensuring logical separation at Layer 2.   
+  Each Tanzu Greenplum traffic type is mapped to a dedicated port group, ensuring logical separation at Layer 2.   
 * Host-Independent Behavior   
   VM networking behavior remains consistent regardless of which ESXi host the VM runs on, simplifying HA and DRS operations.
 
 ### Uplink Count Options
 
-Each ESXi host in the Greenplum cluster uses one of two uplink counts:
+Each ESXi host in the Tanzu Greenplum cluster uses one of two uplink counts:
 
 * **Minimum production design:** 4 physical uplinks per host.  
 * **Preferred design:** 6 physical uplinks per host, for larger or more critical clusters.
 
-Both designs preserve strict separation of vSAN client traffic and Greenplum interconnect traffic onto different port groups with consistent Active/Standby teaming. 
+Both designs preserve strict separation of vSAN client traffic and Tanzu Greenplum interconnect traffic onto different port groups with consistent Active/Standby teaming. 
 
 The difference between them, examined in [Uplink Teaming Policy](#uplink-teaming-policy), is that 6 uplinks let interconnect and vSAN each own a dedicated NIC pair, which removes a shared-failure risk that the 4-uplink design has to accept.
 
 ## Network Logical Architecture on vSphere
 
-This section describes the logical network architecture used for deploying Greenplum Database on the vSphere platform. The design focuses on strict traffic separation, predictable query performance, and operational stability.
+This section describes the logical network architecture used for deploying Tanzu Greenplum Database on the vSphere platform. The design focuses on strict traffic separation, predictable query performance, and operational stability.
 
-![Network logical architecture for Greenplum on vSphere](./images/network-logical-architecture.png)
+![Network logical architecture for Tanzu Greenplum on vSphere](./images/network-logical-architecture.png)
 
-Greenplum traffic is logically segmented into distinct network types using a vSphere Distributed Switch (vDS). Each traffic type serves a specific functional role within the database and infrastructure stack, and is isolated at the VLAN and port-group level to prevent resource contention.
+Tanzu Greenplum traffic is logically segmented into distinct network types using a vSphere Distributed Switch (vDS). Each traffic type serves a specific functional role within the database and infrastructure stack, and is isolated at the VLAN and port-group level to prevent resource contention.
 
 ### Network Segmentation and Traffic Classes
 
@@ -72,16 +72,16 @@ The following logical networks are used across ESXi hosts, Coordinator and Segme
 | ----- | ----- | ----- |
 | Management | PG-Mgmt | ESXi/vCenter management, SSH, monitoring agents |
 | vMotion | PG-vMotion | vMotion for planned maintenance |
-| Greenplum Interconnect | PG-GP-Interconnect | Segment to segment data exchange, motion operators |
+| Tanzu Greenplum Interconnect | PG-GP-Interconnect | Segment to segment data exchange, motion operators |
 | Client Access/External Access | PG-GP-Client | Apps to Coordinator/Standby connections |
 | Data Operations | PG-GP-DataOps | ETL, gpfdist, and backup/restore traffic |
 | vSAN / vSAN Storage Cluster | PG-vSANClient | ESXi vmkernel traffic to vSAN datastores |
 
-Refer to [Greenplum Database Ports and Protocols documentation](https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-greenplum/7/greenplum-database/security-guide-topics-ports_and_protocols.html) for more details on ports and protocol usage.
+Refer to [Tanzu Greenplum Database Ports and Protocols documentation](https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-greenplum/7/greenplum-database/security-guide-topics-ports_and_protocols.html) for more details on ports and protocol usage.
 
 Key principle:
 
-* Greenplum interconnect and vSAN traffic must never share VLANs or portgroups.  
+* Tanzu Greenplum interconnect and vSAN traffic must never share VLANs or portgroups.  
 * Interconnect and vSAN each get their own VLAN, queues, and uplink assignments, preventing storage IO and motion operators from contending directly.
 
 All portgroups are VLAN-backed on the vDS with no overlays on the data path.
@@ -90,7 +90,7 @@ All portgroups are VLAN-backed on the vDS with no overlays on the data path.
 
 ### Policy Decision
 
-For Greenplum interconnect and vSAN/vSAN Storage Cluster client traffic, the architecture recommends:
+For Tanzu Greenplum interconnect and vSAN/vSAN Storage Cluster client traffic, the architecture recommends:
 
 * Active/Standby uplink teaming with explicit failover order on the vDS.
 
@@ -101,8 +101,8 @@ This may also be applied to Client Access for deterministic pathing in critical 
 Although vSphere supports Active/Active and Load-Based Teaming (LBT), these do not behave like true bandwidth aggregation for vmkernel and latency-sensitive flows:
 
 * vSAN and other vmkernel flows typically use a single active uplink at a time, LBT may move flows between uplinks over time.  
-* Dynamic uplink switching can introduce jitter, route changes, and out-of-order delivery that are difficult to diagnose for Greenplum motion traffic.  
-* LACP/MC-LAG on ToR switches adds complexity and is not required for vSAN or Greenplum interconnect.   
+* Dynamic uplink switching can introduce jitter, route changes, and out-of-order delivery that are difficult to diagnose for Tanzu Greenplum motion traffic.  
+* LACP/MC-LAG on ToR switches adds complexity and is not required for vSAN or Tanzu Greenplum interconnect.   
   VMware guidance for vSAN strongly favors simple, deterministic teaming.
 
 Active/Standby provides:
@@ -111,7 +111,7 @@ Active/Standby provides:
 * Simple, clean failover behavior only on physical link failure.  
 * No dependence on switch-side LACP or proprietary MLAG behavior.
 
-This matches guidance for vSAN networking and aligns well with the Greenplum requirement for stable, low-jitter paths.
+This matches guidance for vSAN networking and aligns well with the Tanzu Greenplum requirement for stable, low-jitter paths.
 
 ### Uplink Usage
 
@@ -134,12 +134,12 @@ For 6 Uplink Hosts:
 
 **Note on mixed-speed NICs**
 
-This Reference Architecture does not recommend deliberately sizing Greenplum clusters with lower-bandwidth NICs for any traffic class. The designs shown here for 4-uplink hosts assume a scenario where the server hardware already has a mixed NIC configuration (for example, 2 x 10/25G and 2 x 40/100G).
+This Reference Architecture does not recommend deliberately sizing Tanzu Greenplum clusters with lower-bandwidth NICs for any traffic class. The designs shown here for 4-uplink hosts assume a scenario where the server hardware already has a mixed NIC configuration (for example, 2 x 10/25G and 2 x 40/100G).
 
 If all NICs can be 25G or higher, that is strongly preferred and simplifies the design.
 
 * If mixed NIC speeds are unavoidable, the mappings in the further sections provide a safe way to:  
-  * Keep Greenplum Interconnect and vSAN Storage Cluster client traffic on the highest-bandwidth NICs at all times.  
+  * Keep Tanzu Greenplum Interconnect and vSAN Storage Cluster client traffic on the highest-bandwidth NICs at all times.  
   * Use lower-bandwidth NICs only for management, vMotion, and optionally GP-Client/DataOps.
 
 When hosts have homogeneous high-bandwidth NICs, use them for all traffic classes as per the 6-uplink table below. The split between 'low-bandwidth for mgmt' and 'high-bandwidth for data' is only for hardware that already ships with such a distinction; it is not a requirement or a cost-optimization recommendation for new designs.
@@ -253,7 +253,7 @@ The preceding sections separate traffic into isolated Layer 2 segments. This sub
 
 ### Interconnect Cannot Be Port-Filtered
 
-The Greenplum interconnect does not use fixed ports. It moves tuples between segments over the dynamically allocated range 1025 to 65535, on both UDP and TCP, and the same range carries transient connections for query execution, data movement, and statistics collection. Ports are assigned per query, so there is no small, stable set to permit.
+The Tanzu Greenplum interconnect does not use fixed ports. It moves tuples between segments over the dynamically allocated range 1025 to 65535, on both UDP and TCP, and the same range carries transient connections for query execution, data movement, and statistics collection. Ports are assigned per query, so there is no small, stable set to permit.
 
 Traffic between segment hosts on the interconnect network must therefore flow freely across the full range. Restricting it to specific ports breaks query execution intermittently and is very hard to diagnose. This is why the interconnect sits on its own isolated VLAN and port group: the open range is safe because nothing else shares the segment, and enforcement happens at the segment edge rather than between segments.
 
@@ -291,7 +291,7 @@ Abbreviations used below:
 | Source | Destination | Port / Protocol | Description |
 | :---- | :---- | :---- | :---- |
 | ETL | Segments, Coordinator | TCP 8080 HTTP, TCP 9000 HTTPS | gpfdist and gpload parallel file transfer |
-| Segments, Coordinator | S3 endpoint | TCP 443, HTTPS | Backup and restore to S3, the preferred target ([Greenplum Backup and Restore](./backup-and-restore.md#greenplum-backup-and-restore)) |
+| Segments, Coordinator | S3 endpoint | TCP 443, HTTPS | Backup and restore to S3, the preferred target ([Tanzu Greenplum Backup and Restore](./backup-and-restore.md#tanzu-greenplum-backup-and-restore)) |
 | Segments, Coordinator | Data Domain | TCP/UDP 111, TCP 2049, 2052, 2051 | NFS portmapper, NFS, mountd, and replication, where Data Domain is used |
 | Coordinator | SMTP relay | TCP 25 or 587 | Optional backup completion email |
 
