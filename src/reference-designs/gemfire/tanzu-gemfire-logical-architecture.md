@@ -6,12 +6,12 @@ The following overview illustrates the logical architecture of VMware Tanzu GemF
   * **Intra-Region Active/Active High Availability**: Within the primary site (Region 1), Tanzu GemFire members, including Locators and Cache Servers are distributed across multiple Availability Zones. Locators and Servers operate in an Active/Active peer topology, ensuring local fault isolation and zero-downtime failover without crossing WAN boundaries.  
   * **Inter-Region Asynchronous WAN Replication**: Region 1 (Primary Cluster) and Region 2 (Standby Cluster) operate as independent distributed systems. Data synchronization between regions is managed via Gateway Senders and Gateway Receivers over non-NATed, L3-routable networks. This asynchronous event queue model keeps the standby site synchronized while isolating site performance and preserving site autonomy during WAN outages.  
   * **Decoupled Client Communication** (Two-Phase Path): Native GemFire applications interact with the cluster via a two-phase lifecycle:  
-    * **Discovery Phas**e: The client contacts an active Locator to query cluster topology and receive the address of the least-loaded server.   
+    * **Discovery Phase**: The client contacts an active Locator to query cluster topology and receive the address of the least-loaded server.   
     * **Direct Data Path**: The client opens direct, long-lived TCP sockets to the designated Cache Servers for all subsequent get, put, and query operations. Locators and Load Balancers do not sit inline on this steady-state data path.  
 * **Automated Multi-Region Failover (NSX ALB GSLB)**  
   To automate disaster recovery without placing inline proxies on the data path, NSX Advanced Load Balancer (ALB) is integrated optionally as a Global Server Load Balancer (GSLB).  
   * **Architectural Role (DNS, Not Proxy):** NSX ALB acts purely as an intelligent DNS router for native GemFire clients. Clients query the GSLB solely to resolve the cluster's domain name into the direct IP addresses of the active Locators. It does not sit inline as a proxy for the actual data traffic.   
-  * **Intelligent Health Checking:** The GSLB continuously monitors the health of the Tanzu GemFire Locator services. It does this by sending active health probes (e.g., verifying TCP port availability on port 10334\) directly to the Locators in both the primary and standby regions.   
+  * **Intelligent Health Checking:** The GSLB continuously monitors the health of the Tanzu GemFire Locator services. It does this by sending active health probes (e.g., verifying TCP port availability on port 10334) directly to the Locators in both the primary and standby regions.   
   * **Uninterrupted Connectivity:** Because the NSX ALB hands out the actual back-end Locator IPs, native clients can maintain their built-in connection pools and routing mechanisms. This eliminates network bottlenecks and avoids creating a single point of failure (SPOF) in the data path.  
 * **Alternatives to GSLB (Environments Without NSX ALB)**   
   GSLB integration is optional and recommended primarily when automated, low-RTO failover is required. In environments without NSX ALB or GSLB capabilities, disaster recovery can be managed through alternative procedures:  
@@ -21,7 +21,7 @@ The following overview illustrates the logical architecture of VMware Tanzu GemF
     If DNS updates are restricted, administrators update client application properties (e.g., gemfire.properties or Spring Boot configuration) with the Region 2 Locator IPs, followed by an application restart.
 
 **Critical Architectural Constraint: Avoid Cross-Site Locator Lists:**   
-Clients must never be configured with a combined list of locators spanning both regions simultaneously (e.g., locators=locator-r01az01-IP\[10334\], locatos-r02az01-IP\[10334\]). Because GemFire native clients randomize locator addresses for initial load balancing, a dual-region configuration risks forcing healthy clients in Region 1 to connect to Region 2 servers during normal operations, causing severe cross-WAN latency and potential data divergence.
+Clients must never be configured with a combined list of locators spanning both regions simultaneously (e.g., locators=locator-r01az01-IP[10334], locatos-r02az01-IP[10334]). Because GemFire native clients randomize locator addresses for initial load balancing, a dual-region configuration risks forcing healthy clients in Region 1 to connect to Region 2 servers during normal operations, causing severe cross-WAN latency and potential data divergence.
 
 ## Key Components of Tanzu GemFire
 This section outlines the core components of Tanzu GemFire, which together provide a distributed, in-memory data management platform optimized for high performance, dynamic scalability, and fault tolerance..
@@ -66,10 +66,10 @@ The Tanzu GemFire Management Console is a standalone web application (shipped as
 
 **Unified Metrics Exposure (GemFire 10.3 Architecture)**
 
-Unlike older versions that required dedicated metrics ports, GemFire 10.3 consolidates observability onto the member\`s standard HTTP service port. Each member in the cluster natively exposes its statistics (prefixed with gemfire\_, such as gemfire\_gets) at the /metrics endpoint.
+Unlike older versions that required dedicated metrics ports, GemFire 10.3 consolidates observability onto the member's standard HTTP service port. Each member in the cluster natively exposes its statistics (prefixed with `gemfire_`, such as `gemfire_gets`) at the /metrics endpoint.
 
 * **Locators:** The endpoint is enabled by default via the enable-management-rest-service=true property.   
-* **Servers:** The endpoint is enabled by appending the \--start-rest-api flag during startup.   
+* **Servers:** The endpoint is enabled by appending the --start-rest-api flag during startup.   
 * **Port** **Isolation:** To adhere to security best practices, administrators can restrict the HTTP service port to explicitly serve only metrics (disabling the Developer REST APIs) by configuring http-services=metrics. The emission level can also be tuned per member (Default, All, or None).
 
 **Prometheus & Grafana Integration**
@@ -78,4 +78,5 @@ The Management Console provides deep observability through a native Prometheus i
 
 * **Data Collection (Prometheus):** A Prometheus server (either embedded within the Console or managed externally by the organization) acts as the time-series database. It directly scrapes the /metrics endpoints on the HTTP service ports of the cluster members.   
 * **Management Console Visualization:** The Management Console actively queries Prometheus using PromQL to populate its Monitoring tab. The Console organizes these insights into three core areas: Data (throughput, latencies, cache hit ratios), Cluster (memory, CPU, disk utilization, IO waits), and WAN Gateway (receiver throughput and sender queues). The UI provides a viewing window capping at a 7-day history.   
-* **Grafana Extensibility:** Because the data is collected natively in Prometheus, organizations can seamlessly point Grafana directly at the same Prometheus instance. This allows teams to leverage the full catalog of “gemfire\_” metrics to build highly customized, long-term observability dashboards independently of the Management Console.
+* **Grafana Extensibility:** Because the data is collected natively in Prometheus, organizations can seamlessly point Grafana directly at the same Prometheus instance. This allows teams to leverage the full catalog of `gemfire_` metrics to build highly customized, long-term observability dashboards independently of the Management Console.
+

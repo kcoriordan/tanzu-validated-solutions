@@ -17,3 +17,4 @@ For more details refer to the [official documentation](https://techdocs.broadcom
 * **WAN environments.** Locators discover the locators of remote clusters across the WAN. Low, stable latency on these links is important for reliable multi-site discovery and replication.
 
 By acting as the discovery, coordination, and client-routing layer, the Locator forms the backbone of a cluster's connectivity. A well-configured locator topology keeps the distributed system connected, balanced, and resilient as it scales across zones, regions, and data centers.
+

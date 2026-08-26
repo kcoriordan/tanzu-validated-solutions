@@ -9,20 +9,21 @@ This reference architecture demonstrates how Tanzu GemFire can be deployed on a 
 
 By optionally integrating with NSX Advanced Load Balancer (ALB) the architecture ensures seamless health monitoring, and failover handling for both client and inter-cluster communication. NSX-T enhancements in VCF 9 such as Projects, VPCs, and Gateway services further enhance network isolation, automation, and multi-tenancy capabilities, simplifying connectivity between GemFire regions across data centers.
 
-The document outlines architecture principles, deployment topology, and operational best practices for building a scalable, performant, and resilient Tanzu GemFire platform on VCF 9\. It provides guidance for platform engineers, architects, and operations teams to design and operate GemFire clusters optimized for reliability, elasticity, and enterprise integration.
+The document outlines architecture principles, deployment topology, and operational best practices for building a scalable, performant, and resilient Tanzu GemFire platform on VCF 9. It provides guidance for platform engineers, architects, and operations teams to design and operate GemFire clusters optimized for reliability, elasticity, and enterprise integration.
 
 **Note**:  
 Configuration, lifecycle management, and scaling considerations for core VCF components such as vCenter, NSX, and SDDC Manager are beyond the scope of this document. Readers should refer to the official VMware Cloud Foundation documentation or consult VMware Solution Engineering teams for environment-specific guidance.
 
-For context, this document includes a high-level overview of the underlying vSphere platform components to illustrate the integration points for Tanzu GemFire within VCF 9\.
+For context, this document includes a high-level overview of the underlying vSphere platform components to illustrate the integration points for Tanzu GemFire within VCF 9.
 
 
 ## Bill Of Materials (BOM)
 | Component | Version / Requirement | Notes |
-| ----- | ----- | ----- |
-| VMware vSphere | Minimum: VMware vSphere Foundation (VVF) 9\. Supported: VMware Cloud Foundation (VCF) 9 | Required for compute virtualization, networking, HA, and DRS |
+|---|---|---|
+| VMware vSphere | Minimum: VMware vSphere Foundation (VVF) 9. Supported: VMware Cloud Foundation (VCF) 9 | Required for compute virtualization, networking, HA, and DRS |
 | vCenter Server | 9.x | Required for centralized management, lifecycle operations, and cluster services |
 | ESXi Hosts | 9.x, aligned with VVF/VCF | Compute hosts for GemFire member VMs; size for NUMA locality |
 | Storage | vSphere datastore for GemFire persistence and overflow (VMFS, NFS, or vSAN as applicable) | GemFire is primarily in-memory; provision durable storage for disk stores (persistence), overflow, and logs. |
 | Tanzu GemFire | 10.3 | This reference architecture is validated against GemFire 10.3 |
+
 

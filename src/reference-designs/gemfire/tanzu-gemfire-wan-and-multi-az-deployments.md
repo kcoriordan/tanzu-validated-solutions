@@ -36,7 +36,7 @@ Key characteristics:
 Example:
 
 * A cluster is deployed across three zones in one region (Zone A, Zone B, Zone C).  
-* Each partitioned region is configured with a redundancy level of 1\.  
+* Each partitioned region is configured with a redundancy level of 1.  
 * With the `redundancy-zone` configured correctly, GemFire places primary and redundant copies in different zones. See Configuring Redundancy Zones.  
 * If one zone fails, the cluster continues operating from replicas in the surviving zones.
 
@@ -65,4 +65,5 @@ Benefits:
 * Complements vSphere DRS anti-affinity rules for host-level fault isolation.
 
 Reference: [Set Redundancy Zones for Partitioned Regions](https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire/10-3/gf/developing-partitioned_regions-set_redundancy_zones.html)
+
 

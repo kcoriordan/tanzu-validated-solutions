@@ -10,7 +10,7 @@ The front-end API can be routed to any supported Log4j 2 backend. Tanzu GemFire 
 * `log4j-api-2.18.0.jar`  
 * `log4j-core-2.18.0.jar`
 
-Both JARs are included under `<path-to-product>/lib` and are bundled within the `*-dependencies.jar` convenience libraries.
+Both JARs are included under `&lt;path-to-product&gt;/lib` and are bundled within the `*-dependencies.jar` convenience libraries.
 
 If your own application or a third-party library uses a different front-end logging API, add the matching Log4j 2 bridge, binding, or adapter JAR so that those messages are also routed to Log4j 2:
 
@@ -30,7 +30,7 @@ Logging can be configured using:
 **Recommended setup:**
 
 * Run a time synchronization service such as NTP on all GemFire hosts to ensure consistent timestamps across members. Synchronized clocks are the only way to accurately merge and correlate log messages from different hosts.  
-* Use a central log management platform (for example, rsyslog, or VCF Operations for Logs (formerly VMware Aria Operations for Logs/vRealize Log Insight) to collect and monitor warnings and errors.  
+* Use a central log management platform (for example, rsyslog, or VCF Operations for Logs (formerly VMware Aria Operations for Logs/vRealize Log Insight)) to collect and monitor warnings and errors.  
 * Configure each member to log to its own file for easier debugging and log correlation.
 
 ### Default Logging Properties
@@ -39,7 +39,7 @@ The following are the default GemFire logging properties:
 | Property | Description |
 | ----- | ----- |
 | log-level | Sets the verbosity of log messages. Supported values (case-insensitive): `none`, `severe`, `error`, `warning`, `info`, `config`, `fine`, `finer`, `finest`, `all`. The default is `config`. For general troubleshooting, use `config` or higher. Use `fine` or lower only for deep debugging, because verbose levels can affect performance. |
-| log-file | Specifies the output log file name (relative or absolute path). When a member is started with gfsh and `log-file` is not set, output defaults to `working-directory/<member-name>.log` (for example, `server-name.log` for servers and `locator-name.log` for locators).  |
+| log-file | Specifies the output log file name (relative or absolute path). When a member is started with gfsh and `log-file` is not set, output defaults to `working-directory/&lt;member-name&gt;.log` (for example, `server-name.log` for servers and `locator-name.log` for locators).  |
 | log-file-size-limit | Maximum size (in MB) of a single log file. When the limit is exceeded, logs roll over to a new file. A value of `0` means no size limit (a single, non-rolling log file). |
 | log-disk-space-limit | Total disk space (in MB) allocated for all rolled log files. When the limit is reached, the oldest rolled files are deleted first. A value of `0` disables the limit. |
 
@@ -63,7 +63,7 @@ To enable file logging, set the `gfsh.log-level` system property before starting
 export JAVA_ARGS=-Dgfsh.log-level=[severe|warning|info|config|fine|finer|finest]
 ```
 
-gfsh writes its log to the directory from where it is launched, named in the format `gfsh-<unique>_<generation>.log` (for example, `gfsh-0_0.log`); shells started concurrently in the same directory receive distinct file names. Because these files are written on the administrative host rather than on the GemFire nodes, collect them from that host if you need to retain them.
+gfsh writes its log to the directory from where it is launched, named in the format `gfsh-&lt;unique&gt;-&lt;generation&gt;.log` (for example, `gfsh-0-0.log`); shells started concurrently in the same directory receive distinct file names. Because these files are written on the administrative host rather than on the GemFire nodes, collect them from that host if you need to retain them.
 
 ### Customizing Log4j 2 for Centralized Logging
 The `log-*` settings in `gemfire.properties` are a deliberately narrow interface. They configure GemFire's built-in `GeodeLogWriter` appender and control only the log level, file name, per-file size limit, and total disk-space limit, writing plain-text rolling files to each member's local disk. That model cannot forward logs off the host, emit structured output, set per-package log levels, or log asynchronously. Because GemFire is built directly on Apache Log4j 2, supplying your own `log4j2.xml` unlocks the full Log4j 2 feature set, which is what centralized, enterprise-grade logging requires. This path is intended for advanced users who need that level of control, or who must integrate GemFire logging with the logging APIs of third-party libraries.
@@ -76,7 +76,7 @@ A custom `log4j2.xml` enables the capabilities the property-based model does not
 * Asynchronous loggers and appenders, which reduce logging overhead and latency under GemFire's high thread concurrency.  
 * Correlation across members (with NTP-synchronized clocks) and with your application and third-party library logs, using the bridge, binding, and adapter JARs described earlier.
 
-An example configuration file ships with the product distribution at `$GEMFIRE/config/log4j2.xml`. To supply your own file (`.xml`, `.json`, or `.yaml`), start the JVM or GemFire member with the `-Dlog4j.configurationFile=<path>` flag. When `log4j.configurationFile` is set, GemFire does not use the `log4j2.xml` bundled in `gemfire-log4j-<version>.jar`.
+An example configuration file ships with the product distribution at `$GEMFIRE/config/log4j2.xml`. To supply your own file (`.xml`, `.json`, or `.yaml`), start the JVM or GemFire member with the `-Dlog4j.configurationFile=&lt;path&gt;` flag. When `log4j.configurationFile` is set, GemFire does not use the `log4j2.xml` bundled in `gemfire-log4j-&lt;version&gt;.jar`.
 
 Adopting a custom configuration also means taking on its operational responsibilities. In particular, the `alter runtime --log-level` and `change loglevel` runtime controls work as-is with the default configuration, but when a custom Log4j 2 configuration is in use, `change loglevel` takes effect only if the member was started with the `geode.LOG_LEVEL_UPDATE_OCCURS=ALWAYS` system property.  
 When customizing `log4j2.xml`, observe these product-specific caveats from the GemFire 10.3 [product documentation](https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire/10-1/gf/managing-logging-configuring_log4j2.html):
@@ -129,8 +129,8 @@ if ($fromhost-ip == 'Locator-IP' or $fromhost-ip == 'Server-IP') then {
 }
 ```
 
-* Update GemFire’s log4j2.xml  
-  Modify each member’s Log4j 2 configuration file (log4j2.xml) to include a Syslog Appender that forwards logs to the centralized server.  
+* Update GemFire's log4j2.xml  
+  Modify each member's Log4j 2 configuration file (log4j2.xml) to include a Syslog Appender that forwards logs to the centralized server.  
   Sample configuration:
 
 ```xml
@@ -184,3 +184,4 @@ Best Practices
 * Regularly rotate and archive logs to prevent disk exhaustion.  
 * Use synchronized clocks (NTP) across all nodes for accurate log correlation.  
 * Periodically inspect logs for unexpected warnings or severe events.
+

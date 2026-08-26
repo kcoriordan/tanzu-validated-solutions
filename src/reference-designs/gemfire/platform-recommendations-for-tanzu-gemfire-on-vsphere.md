@@ -77,7 +77,7 @@ Enable Java Large Pages (Huge Pages) inside the guest OS:
 
 This reduces TLB misses and improves garbage-collection efficiency for large heaps. Large pages require a supporting operating-system limit: raise the locked-memory limit (`ulimit -l`, shown as "max locked memory") to at least the total heap memory the member locks. The default is typically 32 KB or 64 KB, which is far too low, and without raising it large pages will not engage.
 
-**Garbage Collector Selection and Tuning {\#garbage-collector-selection-and-tuning}**
+**Garbage Collector Selection and Tuning {#garbage-collector-selection-and-tuning}**
 
 The choice of garbage collector directly affects pause times, and a long pause can make a data node unresponsive long enough to be suspected and expelled from the cluster (governed by `member-timeout`). Proper heap sizing together with the recommended collector is the primary defense against pause-induced membership loss.
 
@@ -92,7 +92,7 @@ Although G1GC is the Java default, VMware recommends the Z Garbage Collector (ZG
 There is an important heap-size trade-off. On a 64-bit JVM with a heap smaller than 32 GB, switching from G1GC to ZGC can increase the cache's heap usage by up to 80%, and the exact impact depends on the nature of the cached data. On a heap of 32 GB or larger, switching to ZGC does not increase heap usage. ZGC is therefore a clear choice for large heaps; for smaller heaps, size for the additional overhead or evaluate retaining G1GC.  
 If G1GC is retained (for example, for storage efficiency on smaller heaps), start mixed collections early with `-XX:InitiatingHeapOccupancyPercent=25`, and note that heaps under 32 GB benefit from `-XX:+UseCompressedOops` (applied automatically when applicable, but not available with ZGC or with heaps of 32 GB or larger). Using G1GC together with GemFire heap LRU eviction requires additional testing and tuning, primarily to avoid humongous-object penalties.
 
-### 
+
 
 ### Low-Latency Workload Settings (vSphere Level)
 Apply the following on the GemFire VMs:
@@ -100,17 +100,17 @@ Apply the following on the GemFire VMs:
 * Use **VMXNET3** network adapters.  
 * Consider disabling **interrupt coalescing** for ultra-low-latency deployments.  
 * Enable **High Performance power policy** in ESXi:  
-  * Host Client \-\> Manage \-\> Hardware \-\> Power Management \-\> High Performance  
+* Host Client -> Manage -> Hardware -> Power Management -> High Performance  
 * Disable unnecessary guest OS background services to reduce jitter.
 
 Optional (Advanced Operations Only)
 
 * CPU Affinity or NUMA Node Pinning may be used to eliminate cross-node scheduling, but should be applied only when strictly required and tested.
 
-### 
+
 
 ### Operating System & Java Runtime Requirements
-Supported Java versions for Tanzu GemFire 10.3. JDK 17 is the minimum and baseline version; the supported set is JDK 17, 21, and 25\.
+Supported Java versions for Tanzu GemFire 10.3. JDK 17 is the minimum and baseline version; the supported set is JDK 17, 21, and 25.
 
 | JDK | Recommended Version | Minimum Version |
 | ----- | ----- | ----- |
@@ -126,7 +126,7 @@ On Linux, systemd must be configured. GemFire requires the udev device manager (
 **Guest OS Level Resource Limits**  
 To support high concurrency and I/O workloads, configure appropriate user and process limits on Unix/Linux hosts, configure `/etc/security/limits.conf`: 
 
-| Parameter | ​​Recommended Soft Limit | Recommended Hard Limit |
+| Parameter | Recommended Soft Limit | Recommended Hard Limit |
 | ----- | ----- | ----- |
 | File Descriptors (nofile) | 8,192 | 81,920 |
 | Number of Processes (nproc) | 501,408 | Unlimited |
@@ -170,7 +170,7 @@ Use VMXNET3 for All GemFire VMs
 
 **Disable Virtual Interrupt Coalescing (For Ultra-Low Latency)**
 
-* Can be disabled via the VM’s `.vmx` configuration or via the vSphere API.  
+* Can be disabled via the VM's `.vmx` configuration or via the vSphere API.  
 * Only recommended for extremely latency-sensitive deployments where jitter must be minimized.
 
 **TCP SYN Cookie Configuration (Guest OS)**  
@@ -209,7 +209,7 @@ sudo vi /etc/rc.local
 Additional guest OS TCP tuning:
 
 * Disabling TCP Slow-Start After Idle Disabling will improve performance of long-lived TCP connections, which transfer data in bursts.  
-* Enabling Window Scaling (RFC 1323\) increases the maximum receive window size and allows high-latency connections to achieve better throughput   
+* Enabling Window Scaling (RFC 1323) increases the maximum receive window size and allows high-latency connections to achieve better throughput   
 * Enabling TCP Low Latency effectively tells the operating system to sacrifice throughput for lower latency. For latency sensitive workloads like GemFire, this is an acceptable tradeoff that can improve performance.   
 * Enabling TCP Fast Open allows application data to be sent in the initial SYN packet in certain situations. TFO is a new optimization, which requires support on both clients and servers and may not be available on all operating systems.  
 
@@ -234,7 +234,7 @@ Accurate and consistent time across all GemFire members is mandatory. Use NTP or
 
 * Enable NTP at both the ESXi host and VM operating system levels.  
 * Ensure all cluster nodes point to the same NTP server hierarchy.  
-* Avoid mixing different time sources (e.g., ESXi-based time sync \+ guest NTP).
+* Avoid mixing different time sources (e.g., ESXi-based time sync + guest NTP).
 
 **Name Resolution & Host Configuration**  
 To avoid locator or management endpoint failures:
@@ -255,7 +255,7 @@ Sizing VMs within NUMA boundaries ensures:
 vSphere uses NUMA-aware scheduling to ensure that virtual machines receive CPU and memory resources from the same physical NUMA node whenever possible. The following describes vSphere behavior under two common sizing scenarios.  
 **When a VM has fewer vCPUs and less memory than a single NUMA node provides**  
 If the VM's CPU and memory footprint fits entirely inside one physical NUMA node, vSphere keeps the VM bound to that node. This is the ideal configuration for GemFire. Key behaviors:  
-​​Key behaviors:
+Key behaviors:
 
 * Single NUMA placement: ESXi places the VM entirely on one NUMA node, so both CPU scheduling and memory allocations are served by that node's local memory controller.  
 * No vNUMA exposure: because the VM does not need to span nodes, ESXi does not expose any vNUMA topology to the guest OS.  
@@ -308,9 +308,9 @@ vSphere features such as vMotion, DRS and snapshots can introduce instability or
 
 
 ## vSphere High Availability (HA), Automatic Restart, and systemd
-### 
 
-### **Official Recommendation {\#vsphere-ha-official-recommendation}** }
+
+### **Official Recommendation {#vsphere-ha-official-recommendation}**
 
 The Tanzu GemFire 10.3 performance guidance is explicit: deactivate vSphere High Availability (HA) on GemFire virtual machines. If the GemFire cluster runs on a dedicated cluster, deactivate HA across that cluster; if it runs on a shared cluster, exclude the GemFire VMs from vSphere HA. In addition, define VM-to-VM anti-affinity rules so that members holding redundant copies of the same data are never placed on the same ESXi host.
 
@@ -337,7 +337,7 @@ Because systemd is already a GemFire prerequisite, running each member as a syst
 The central design point is making the surviving cluster wait long enough for an HA-restarted member to return before it rebuilds redundancy, so that the cluster does not perform a full recovery and then a second rebalance when the member rejoins. Three GemFire settings govern this sequence.
 
 * `member-timeout` (in `gemfire.properties`, default 5000 ms) determines how quickly the cluster suspects and then evicts an unresponsive member. This is the first timer in the sequence. Do not set it so low that a normal garbage-collection pause or a vMotion stun triggers a false eviction; it must comfortably exceed expected pauses. This is also why the garbage-collector recommendation matters, since a long pause combined with a low member-timeout causes avoidable evictions.  
-* `recovery-delay` (a partitioned-region attribute, default \-1, meaning no automatic redundancy recovery on member departure) determines how long the cluster waits after detecting a member's departure before restoring redundancy on the remaining members. To have the cluster wait for an HA-restarted member to return, set `recovery-delay` to at least the expected time for HA to detect the failure, restart the VM, boot the guest, and start the GemFire member. Within that window the cluster does not promote or create new secondaries, so when the member returns there is no rebalance storm. The trade-off is that the cluster runs at reduced redundancy during that window, which is a risk only if a second failure occurs before the member returns.  
+* `recovery-delay` (a partitioned-region attribute, default -1, meaning no automatic redundancy recovery on member departure) determines how long the cluster waits after detecting a member's departure before restoring redundancy on the remaining members. To have the cluster wait for an HA-restarted member to return, set `recovery-delay` to at least the expected time for HA to detect the failure, restart the VM, boot the guest, and start the GemFire member. Within that window the cluster does not promote or create new secondaries, so when the member returns there is no rebalance storm. The trade-off is that the cluster runs at reduced redundancy during that window, which is a risk only if a second failure occurs before the member returns.  
 * `startup-recovery-delay` (default 0, meaning immediate recovery when a member joins) determines how quickly buckets are restored to the returning member once it rejoins. Keeping it low re-absorbs the member promptly; raising it lets you control when the rejoin rebalance runs.
 
 In combination: `member-timeout` decides how fast a loss is noticed, `recovery-delay` decides how long the cluster waits before acting, and persistence plus `startup-recovery-delay` decide how cheaply the returning member rejoins. Set `recovery-delay` from your measured HA-detection-plus-boot-plus-startup time and your tolerance for a temporary reduction in redundancy.  
@@ -349,7 +349,7 @@ Enabling vSphere HA for infrastructure-level restart introduces specific risks a
 
 Risks to account for:
 
-* Cascading double-recovery. If the VM restart time exceeds a positive `recovery-delay`, the surviving nodes begin redundancy recovery by promoting secondary buckets and creating new redundant copies. When the failed VM eventually restarts and rejoins, a second recovery and rebalance occurs as the cluster sheds the now-excess copies, re-elects primaries, and reloads the returning member's data. This second event is a full recovery-and-rebalance rather than an incremental redistribution, so the latency impact on latency-sensitive applications is effectively doubled. This is specifically a risk of setting `recovery-delay` to a positive value shorter than the real restart time, not of the feature itself (the default of \-1 performs no automatic recovery on departure).  
+* Cascading double-recovery. If the VM restart time exceeds a positive `recovery-delay`, the surviving nodes begin redundancy recovery by promoting secondary buckets and creating new redundant copies. When the failed VM eventually restarts and rejoins, a second recovery and rebalance occurs as the cluster sheds the now-excess copies, re-elects primaries, and reloads the returning member's data. This second event is a full recovery-and-rebalance rather than an incremental redistribution, so the latency impact on latency-sensitive applications is effectively doubled. This is specifically a risk of setting `recovery-delay` to a positive value shorter than the real restart time, not of the feature itself (the default of -1 performs no automatic recovery on departure).  
 * Reduced-redundancy window. A longer `recovery-delay` avoids the double event but leaves the cluster exposed to a coincident second failure for the duration of the window.  
 * VM Monitoring false restart. HA VM Monitoring can restart a VM whose guest heartbeat fails, so a member that is alive but briefly unresponsive (for example, during a long GC pause) can be restarted at the same moment GemFire's own failure detection is acting, producing conflicting recovery.  
 * Premature detection. An aggressive `member-timeout` can declare a loss during a transient stall (a GC pause or a vMotion stun), starting the recovery clock for a member that never actually left.
@@ -378,7 +378,7 @@ For optimal I/O performance, follow these storage best practices:
 * Map a dedicated LUN to each VMDK where possible.  
 * In Linux guests, configure the NOOP I/O scheduler (instead of CFQ) to minimize scheduling overhead. For more information, see the [Performance Tuning for Latency-Sensitive Workloads on VMware vSphere 8 White Paper](https://www.vmware.com/docs/perf-latency-tuning-vsphere8).
 
-## 
+
 
 ## Performance Tuning for GemFire on VMware vSphere
 Below table provides high level overview best configurations to host GemFire instances on VCF Platform, for more details refer to the [official documentation](https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire/10-3/gf/managing-monitor_tune-chapter_overview.html), and vSphere best practices [white paper](https://www.vmware.com/docs/perf-latency-tuning-vsphere8)
@@ -387,19 +387,19 @@ Below table provides high level overview best configurations to host GemFire ins
 | :---- | :---- | :---- |
 | Latest Hardware & vSphere | Use most recent CPUs, BIOS, vSphere, VM Tools, and Virtual HW. | Minimizes latency and enables latest optimizations. Always run GemFire on supported, up-to-date infrastructure. |
 | BIOS Power Settings | High Performance, Turbo Boost enabled, C/P/QPI states disabled, Node interleaving disabled. | Ensures maximum CPU frequency and NUMA locality, reducing compute and memory latency for GemFire. |
-| EVC Mode | Disable or use the highest supported baseline for CPUs. | Avoid masking out advanced processor instructions; this benefits GemFire’s multi-threaded performance. |
-| vMotion & DRS Scheduling | Avoid live migrations (vMotion/DRS) for GemFire during busy periods. | vMotion introduces a “stun” risk of short outages; schedule migrations and DRS moves only in planned windows for GemFire VMs. |
+| EVC Mode | Disable or use the highest supported baseline for CPUs. | Avoid masking out advanced processor instructions; this benefits GemFire's multi-threaded performance. |
+| vMotion & DRS Scheduling | Avoid live migrations (vMotion/DRS) for GemFire during busy periods. | vMotion introduces a "stun" risk of short outages; schedule migrations and DRS moves only in planned windows for GemFire VMs. |
 | NIC Ring Buffers & SplitRX/TX | Increase ring buffer size, enable SplitRX and SplitTX for NICs. | Prevents packet drops during high-throughput operations. GemFire benefits from larger buffers for replication/traffic spikes. |
 | Disable Queue Pairing | Separates transmit and receive threads in NIC driver. | Reduces risk of packet loss during transmit-heavy GemFire operations; monitor CPU usage with this change. |
 | VM Right Sizing | Size VM vCPUs and memory to fit within a single NUMA node if possible. | Avoid oversized VMs; keep all resources local for in-memory GemFire workloads, lowering latency. |
-| Virtual Hardware Version | Use latest version (vHW 21+). | Ensures VM gets latest CPU features and optimizations; GemFire can process more transactions per second. |
+| Virtual Hardware Version | Use latest version (vHW 21 or later). | Ensures VM gets latest CPU features and optimizations; GemFire can process more transactions per second. |
 | Leverage vTopology | Match VM vCPU sockets/cores to host architecture. | Ensures guest OS (and GemFire JVM) sees the real processor topology; improves thread locality and performance. |
 | Disable Hot-Add | Disabling CPU/mem hot-add exposes VM NUMA topology. | Allows GemFire to take advantage of NUMA awareness, reducing cross-node memory access delay. |
 | Set VM Latency Sensitivity to High | Gives VM exclusive access to pCPU/memory. | Eliminates contention. Use for GemFire VMs with strict latency SLAs; set CPU/memory reservation fully. |
-| Use VMXNET3 Adapter | VMware’s high-perf paravirtualized network driver. | Always select VMXNET3 (with offload/tuning); handles GemFire’s replication and client traffic efficiently. |
+| Use VMXNET3 Adapter | VMware's high-perf paravirtualized network driver. | Always select VMXNET3 (with offload/tuning); handles GemFire's replication and client traffic efficiently. |
 | Balance Tx/Rx and Thread Affinity | Multiply vNIC parallelism; affinitize Tx thread to NUMA node. | Allows GemFire networking (replication, client traffic) consistent, high-bandwidth and low-latency performance. |
-| NUMA Node Affinity | Pin VM to a NUMA node | Ensures memory/network traffic stays local, again beneficial for GemFire’s in-memory data grid behavior. |
-| SR-IOV/DirectPath I/O (If Needed) | Direct VM-\>NIC access for highest throughput. | Recommended only if VMXNET3 does not meet GemFire networking needs; note trade-offs (losing vMotion, resource pooling). |
+| NUMA Node Affinity | Pin VM to a NUMA node | Ensures memory/network traffic stays local, again beneficial for GemFire's in-memory data grid behavior. |
+| SR-IOV/DirectPath I/O (If Needed) | Direct VM to NIC access for highest throughput. | Recommended only if VMXNET3 does not meet GemFire networking needs; note trade-offs (losing vMotion, resource pooling). |
 | Advanced VM Parameters | Set sched.cpu.affinity.exclusiveNoStats, monitor.forceEnableMPTI, timeTracker.lowLatency. | Further improves VM isolation and timing precision; useful for highly critical GemFire workloads. |
 | Networking: Enhanced Datapath, DPUs | Offload VM networking to SmartNICs or DPUs. | Consider this for containerized or NFV-style GemFire deployments; may benefit multi-tenant and high-bandwidth clusters. |
 | Guest OS Tuning | Kernel, driver, and stack optimization as per vendor. | Apply Linux or Photon OS tuning (real-time kernel etc.). For GemFire JVM, ensure OS is tuned for low latency and thread scheduling. |
@@ -414,3 +414,4 @@ Additional recommendations for GemFire instances:
 * Regularly monitor network and memory utilization using ESXi operational tools for proactive adjustment.
 
 This mapping enables a targeted performance architecture for GemFire clusters on vSphere, tuned for memory intensity and latency sensitivity, and is actionable for the system administrators and architects managing critical deployments.
+

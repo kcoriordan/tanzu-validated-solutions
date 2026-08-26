@@ -43,7 +43,7 @@ GemFire handles reads and writes differently in partitioned regions with redunda
 
 This approach enables high availability and strong consistency without sacrificing performance.
 
-### 
+
 
 ### Replicated Region
 A Replicated Region gives every hosting server a full copy of the data. When an entry is created or updated on one server, the change is automatically propagated to all other servers hosting that region.
@@ -68,7 +68,7 @@ You can configure:
 * Parallel gateway senders, to increase throughput and concurrency.  
 * Serial gateway senders, to preserve strict event ordering.
 
-### 
+
 
 ### Serial Gateway Senders
 A Serial Gateway Sender routes region events through a single, ordered queue to the remote site, delivering events in the exact order they were created. This matters when the update sequence is significant. Because all events pass through one queue, throughput can become a bottleneck under heavy load. To scale, assign different regions to separate serial senders; this spreads load while preserving ordering within each region.
@@ -90,4 +90,5 @@ A Gateway Receiver in Tanzu GemFire is a server-side component that listens for 
 A Gateway Receiver is a server-side component that listens for incoming region events from remote clusters and applies them to local regions. Each member can host at most one gateway receiver, and deploying receivers on multiple members provides load balancing and high availability. By default a gateway receiver starts automatically (`manual-start = false`).  
 Gateway senders connect automatically to any available receiver in the target cluster; there are no explicit sender-to-receiver bindings. When you add receivers (for example, a new receiver node at a remote site), you can redistribute sender connections with the `load-balance gateway-sender` gfsh command or the `GatewaySender.rebalance()` Java API. This causes the sender to close and re-establish its connections more evenly across the available receivers.  
 For replication to succeed, every member that hosts a receiver must define all of the regions for which that receiver may receive events. If a receiver gets an event for a region the local member does not define, GemFire throws an exception. Gateway Receivers complete the WAN replication flow by ensuring distributed, load-balanced ingestion of events across sites.
+
 

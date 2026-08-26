@@ -21,7 +21,7 @@ The GemFire Shell (`gfsh`) is the recommended command-line interface for configu
 * [Creating and Running gfsh Command Scripts](https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire/10-3/gf/tools_modules-gfsh-command_scripting.html)
 
 ## Tanzu GemFire Management Console
-The Tanzu GemFire Management Console is a browser-based console that streamlines day-to-day operations and provides visual insight across your GemFire estate. It is delivered as a standalone application: a JAR file (JDK 11, 17, or 21\) or an OCI container image, that runs alongside your clusters rather than as part of them. It is not a gfsh command, and it can manage an entire fleet of clusters, including multi-site (WAN) topologies, from a single interface.
+The Tanzu GemFire Management Console is a browser-based console that streamlines day-to-day operations and provides visual insight across your GemFire estate. It is delivered as a standalone application: a JAR file (JDK 11, 17, or 21) or an OCI container image, that runs alongside your clusters rather than as part of them. It is not a gfsh command, and it can manage an entire fleet of clusters, including multi-site (WAN) topologies, from a single interface.
 
 **Operations and management (write) capabilities**
 
@@ -50,3 +50,4 @@ GMC's Logs tab lets you view and download logs and statistics for the locators a
 **Authentication modes**  
 GMC supports NONE (Developer Mode), OAuth2, LDAP (including LDAP over TLS/SSL), and SAML for multi-user access.  
 More information on GMC refer to the [Product Documentation](https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire-management-console/1-4/gf-mc/index.html)
+

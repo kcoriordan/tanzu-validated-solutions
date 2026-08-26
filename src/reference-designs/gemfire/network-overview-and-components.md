@@ -1,5 +1,5 @@
 # Network Overview and Components
-The networking foundation for this reference architecture is built on VMware vSphere Distributed Switch (VDS) and NSX-T Data Center, providing a software-defined, scalable, and secure network fabric. This architecture combines the flexibility of NSX-T overlay networks with the logical segmentation capabilities of Projects and Virtual Private Clouds (VPCs), introduced in VMware Cloud Foundation 9\.
+The networking foundation for this reference architecture is built on VMware vSphere Distributed Switch (VDS) and NSX-T Data Center, providing a software-defined, scalable, and secure network fabric. This architecture combines the flexibility of NSX-T overlay networks with the logical segmentation capabilities of Projects and Virtual Private Clouds (VPCs), introduced in VMware Cloud Foundation 9.
 
 ## vSphere Distributed Switch (VDS)
 VDS provides the base network virtualization layer for vSphere clusters. It handles management, vMotion, and storage network traffic, and integrates with NSX-T for overlay transport and workload connectivity.
@@ -11,7 +11,7 @@ NSX-T overlay networking abstracts physical network boundaries, enabling logical
 Projects act as administrative and logical boundaries, allowing isolated environments for different tenants, workloads, or lifecycle stages. 
 
 * Key Concepts:  
-  * Enterprise Administrator (‘Enterprise Admin’) can create and configure custom Projects as needed.  
+  * Enterprise Administrator (�Enterprise Admin�) can create and configure custom Projects as needed.  
   * Resource Allocation: Projects can have quotas set for various resources, such as IP addresses, subnets, and security groups, to prevent overconsumption and ensure fair distribution.  
   * Isolation: Each project operates independently, ensuring that configurations and policies do not overlap or interfere with other projects.  
   * Role-Based Access Control (RBAC): Administrators can assign specific roles to users within a project, controlling their permissions and access to resources.  
@@ -46,3 +46,4 @@ There are three main types of subnets (also called "VPC subnets") supported with
 | Public (Routed via T0 to Physical L3) | Subnet is advertised externally, provides routed access to/from external or provider networks. |
 
 Below diagram provides a high level overview on the Projects and Sample VPC Network Model.![image2](./images/image2.png)
+
