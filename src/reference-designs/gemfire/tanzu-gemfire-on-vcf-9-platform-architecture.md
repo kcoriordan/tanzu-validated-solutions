@@ -1,4 +1,5 @@
 # Tanzu GemFire on VCF 9 Platform Architecture
+
  ![image3](./images/image3.png)
 
 The following design illustrates the Platform Architecture of VMware Tanzu GemFire deployed on the VMware Cloud Foundation (VCF) platform, spanning multiple vSphere Workload Clusters that function as independent Availability Zones (AZs). This architecture demonstrates how GemFire achieves high availability. The deployment can withstand the failure of an entire AZ or even an entire region, while supporting a highly available, fault-tolerant Active–Standby topology suitable for mission-critical workloads.
@@ -58,40 +59,41 @@ In addition to failure resilience, the architecture supports scalability, allowi
    Asynchronous WAN replication, a native capability in GemFire, replicates data from Region 1 to Region 2.
 
 ## <a id="key-features"></a> Key Features of Tanzu GemFire
-* **High Read-and-Write Throughput**: Tanzu GemFire supports high throughput with fast data access, thanks to concurrent memory structures and optimized distribution. Data can be replicated or partitioned across systems to improve read and write speeds. This setup boosts overall throughput, with limits only dependent on network capacity.
 
-* **Low and Predictable Latency**: With a streamlined caching layer, Tanzu GemFire minimizes delays by reducing context switches between threads. Data is efficiently distributed, and subscription management ensures better CPU and bandwidth usage, resulting in faster response times and lower latency.
+- **High Read-and-Write Throughput**: Tanzu GemFire supports high throughput with fast data access, thanks to concurrent memory structures and optimized distribution. Data can be replicated or partitioned across systems to improve read and write speeds. This setup boosts overall throughput, with limits only dependent on network capacity.
 
-* **High Scalability**  
+- **Low and Predictable Latency**: With a streamlined caching layer, Tanzu GemFire minimizes delays by reducing context switches between threads. Data is efficiently distributed, and subscription management ensures better CPU and bandwidth usage, resulting in faster response times and lower latency.
+
+- **High Scalability**  
   Tanzu GemFire can scale easily by distributing data across multiple servers, ensuring balanced load and consistent performance. As demand grows, the system can dynamically add servers, manage data copies, and handle bursts of traffic without sacrificing response time.
 
-* **Continuous Availability**  
+- **Continuous Availability**  
   Tanzu GemFire ensures high availability with data replication and failover mechanisms. Data can be saved on disk synchronously or asynchronously, and if a server fails, another takes over to ensure continuous service without data loss or interruptions.
 
-* **Reliable Event Notifications**  
+- **Reliable Event Notifications**  
   Tanzu GemFire provides a reliable publish/subscribe system that ensures events are delivered with the related data to subscribers. This eliminates the need for separate database access, offering faster, more efficient event processing.
 
-* **Parallelized Application Behavior on Data Stores**  
+- **Parallelized Application Behavior on Data Stores**  
   You can execute business logic across multiple system members, improving efficiency by processing data where it is stored. This reduces network traffic and speeds up calculations, making operations faster, especially for data-heavy tasks.
 
-* **Shared-Nothing Disk Persistence**  
+- **Shared-Nothing Disk Persistence**  
   Each Tanzu GemFire member manages its own data storage, ensuring that disk or cache failures in one member do not affect other members. This "shared nothing" approach increases performance and reliability by isolating disk management.
 
-* **Reduced Cost of Ownership**  
+- **Reduced Cost of Ownership**  
   With tiered caching, Tanzu GemFire reduces costs by using local memory caches and minimizing the need for frequent database access. This lowers overall transaction costs and improves efficiency by avoiding costly database operations.
 
-* **Single-Hop Capability for Client/Server**  
+- **Single-Hop Capability for Client/Server**  
   Tanzu GemFire allows clients to directly access the server holding their data, avoiding multiple hops. This improves performance by making data access quicker and more efficient.
 
-* **Client/Server Security**  
+- **Client/Server Security**  
   Each user in a client application is given access to a specific subset of data, enhancing security and control. Users are authenticated with their own credentials, ensuring data privacy and proper access levels across the system.
 
-* **Multisite Data Distribution**  
+- **Multisite Data Distribution**  
   Tanzu GemFire supports data distribution across geographically dispersed sites. Using gateway sender configurations, the system ensures reliable communication between data centers, allowing scalability without sacrificing performance or data consistency.
 
-* **Continuous Querying**  
+- **Continuous Querying**  
   Tanzu GemFire allows complex queries to run continuously, enabling real-time data updates for applications. This is achieved through Object Query Language, which simplifies querying for dynamic, real-time data processing.
 
-* **Heterogeneous Data Sharing**  
+- **Heterogeneous Data Sharing**  
   Applications written in different languages (C#, C++, Java) can share business objects seamlessly without needing complex transformation layers. Changes in one application automatically trigger updates in others, facilitating smooth integration between different platforms.
 

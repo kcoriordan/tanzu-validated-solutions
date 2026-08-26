@@ -1,4 +1,5 @@
 # Executive Summary
+
 VMware Tanzu GemFire is an in-memory, distributed data management platform. Tanzu GemFire delivers ultra-low latency and high-throughput access to data for mission-critical, real-time applications. Tanzu GemFire enables organizations to build and operate modern, stateful services that require consistent, scalable, and fault-tolerant data across on-premises, hybrid, and multi-site environments.
 
 VMware Cloud Foundation (VCF) 9 provides the modern, full-stack software-defined infrastructure on which Tanzu GemFire can run with enterprise-grade performance and resiliency. Combining compute, storage, networking and security with integrated lifecycle automation, VCF 9 delivers a consistent operational model across private and hybrid clouds.
@@ -18,6 +19,7 @@ For context, this document includes a high-level overview of the underlying vSph
 
 
 ## <a id="bill-of-materials"></a> Bill Of Materials (BOM)
+
 | Component | Version / Requirement | Notes |
 |---|---|---|
 | VMware vSphere | Minimum: VMware vSphere Foundation (VVF) 9. Supported: VMware Cloud Foundation (VCF) 9 | Required for compute virtualization, networking, HA, and DRS |
