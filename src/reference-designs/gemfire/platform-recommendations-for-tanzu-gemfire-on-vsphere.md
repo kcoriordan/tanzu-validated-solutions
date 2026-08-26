@@ -19,7 +19,7 @@ Settings may vary slightly depending on your hardware make and model. Use the se
 
 ## <a id="vm-configuration"></a> Virtual Machine Configuration Guidelines (Tanzu GemFire Cache Servers & Locators)
 
-The following configurations apply to GemFire VMs running in a vSphere environment. The following sections describe key points for performance tuning and configuration. For more details, see the [official documentation](https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire/10-2/gf/managing-monitor_tune-chapter_overview.html).
+The following configurations apply to GemFire VMs running in a vSphere environment. The following sections describe key points for performance tuning and configuration. For more information, see the [official documentation](https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire/10-2/gf/managing-monitor_tune-chapter_overview.html).
 
 ### <a id="cpu-numa"></a> CPU and NUMA Configuration
 
@@ -501,7 +501,7 @@ For optimal I/O performance, follow these storage best practices:
 
 ## <a id="performance-tuning"></a> Performance Tuning for Tanzu GemFire on VMware vSphere
 
-The following table provides a high-level overview of the best configurations for hosting GemFire instances on the VCF Platform. For more details, see the [official documentation](https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire/10-3/gf/managing-monitor_tune-chapter_overview.html) and the vSphere best practices [white paper](https://www.vmware.com/docs/perf-latency-tuning-vsphere8).
+The following table provides a high-level overview of the best configurations for hosting GemFire instances on the VCF Platform. For more information, see the [official documentation](https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire/10-3/gf/managing-monitor_tune-chapter_overview.html) and the vSphere best practices [white paper](https://www.vmware.com/docs/perf-latency-tuning-vsphere8).
 
 | Setting/Feature | Description | GemFire Impact & Recommendation |
 | :---- | :---- | :---- |
