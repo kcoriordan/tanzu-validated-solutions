@@ -44,7 +44,7 @@ The Tanzu GemFire Management Console is a browser-based console that streamlines
 
 - Run commands through a built-in web-based `gfsh`.
 
-- Search and download member logs. See the note under Logging below.
+- Search and download member logs. See the note under [Logging](#gmc-logging) below.
 
 ### <a id="gmc-monitoring"></a> Monitoring and observability (Tanzu GemFire 10.2 and 10.3)
 
@@ -62,7 +62,7 @@ GMC drives its monitoring dashboards from Prometheus rather than by proxying met
 
 - **Graphs.** The Monitoring tab organizes metrics into three categories. The Data category covers throughput and latencies including P95 and P99, cache hit ratio, queries, and async event queues. The Cluster category covers memory, disk utilization, CPU, and client connections. The WAN Gateway category covers receiver throughput and sender queues.
 
-The console is ideal for both routine operations and troubleshooting, providing an intuitive experience for administrators. For more information on GMC, refer to [Tanzu Management Console](https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire-management-console/1-4/gf-mc/index.html)
+The console is ideal for both routine operations and troubleshooting, providing an intuitive experience for administrators. For more information on GMC, see [Tanzu Management Console](https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire-management-console/1-4/gf-mc/index.html)
 
 ### <a id="gmc-logging"></a> Logging
 
@@ -72,5 +72,5 @@ GMC's Logs tab lets you view and download logs and statistics for the locators a
 
 GMC supports NONE, meaning Developer Mode, OAuth2, LDAP, including LDAP over TLS/SSL, and SAML for multi-user access.  
 
-For more information on GMC, refer to the [Product Documentation](https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire-management-console/1-4/gf-mc/index.html)
+For more information on GMC, see the [Product Documentation](https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire-management-console/1-4/gf-mc/index.html)
 

@@ -27,7 +27,7 @@ The following overview illustrates the logical architecture of VMware Tanzu GemF
 
 - **Alternatives to GSLB (Environments Without NSX ALB)**
 
-  GSLB integration is optional and recommended primarily when automated, low-RTO failover is required. In environments without NSX ALB or GSLB capabilities, you can manage disaster recovery through alternative procedures:
+  GSLB integration is optional and recommended primarily when you require automated, low-RTO failover. In environments without NSX ALB or GSLB capabilities, you can manage disaster recovery through alternative procedures:
 
   - **Alternative 1:** Manual DNS Override
 
@@ -39,7 +39,7 @@ The following overview illustrates the logical architecture of VMware Tanzu GemF
 
 ## <a id="cross-site-locators-warning"></a> Critical Architectural Constraint: Avoid Cross-Site Locator Lists
 
-Never configure clients with a combined list of locators spanning both regions simultaneously (for example, locators=locator-r01az01-IP[10334], locatos-r02az01-IP[10334]). Because GemFire native clients randomize locator addresses for initial load balancing, a dual-region configuration risks forcing healthy clients in Region 1 to connect to Region 2 servers during normal operations. This can cause severe cross-WAN latency and potential data divergence.
+Never configure clients with a combined list of locators spanning both regions simultaneously (for example, locators=locator-r01az01-IP[10334], locator-r02az01-IP[10334]). Because GemFire native clients randomize locator addresses for initial load balancing, a dual-region configuration risks forcing healthy clients in Region 1 to connect to Region 2 servers during normal operations. This can cause severe cross-WAN latency and potential data divergence.
 
 ## <a id="key-components"></a> Key Components of Tanzu GemFire
 
@@ -87,7 +87,7 @@ These components enable asynchronous, multi-site WAN replication, ensuring cross
 
 ### <a id="component-console"></a> Tanzu GemFire Management Console
 
-The Tanzu GemFire Management Console is a standalone web application, shipped as a JAR or OCI image, that serves as the central hub for cluster administration, fleet management, and real-time monitoring. Beyond visualization, the Management Console allows administrators to execute write operations, for example creating regions, deploying JARs, or managing gateways, and perform centralized log searches.
+The Tanzu GemFire Management Console is a standalone web application, shipped as a JAR or OCI image, that serves as the central hub for cluster administration, fleet management, and real-time monitoring. Beyond visualization, the Management Console enables administrators to execute write operations, for example creating regions, deploying JARs, or managing gateways, and perform centralized log searches.
 
 ### <a id="unified-metrics"></a> Unified Metrics Exposure (GemFire 10.3 Architecture)
 
@@ -107,5 +107,5 @@ The Management Console provides deep observability through a native Prometheus i
 
 - **Management Console Visualization:** The Management Console actively queries Prometheus using PromQL to populate its Monitoring tab. The Console organizes these insights into three core areas: Data (throughput, latencies, cache hit ratios), Cluster (memory, CPU, disk utilization, IO waits), and WAN Gateway (receiver throughput and sender queues). The UI provides a viewing window capped at a 7-day history.
 
-- **Grafana Extensibility:** Because Prometheus collects the data natively, organizations can point Grafana directly at the same Prometheus instance. This allows teams to use the full catalog of `gemfire_` metrics to build highly customized, long-term observability dashboards independently of the Management Console.
+- **Grafana Extensibility:** Because Prometheus collects the data natively, organizations can point Grafana directly at the same Prometheus instance. This enables teams to use the full catalog of `gemfire_` metrics to build highly customized, long-term observability dashboards independently of the Management Console.
 

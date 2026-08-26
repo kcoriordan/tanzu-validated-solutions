@@ -1,6 +1,6 @@
 # Tanzu GemFire Locators
 
-A Tanzu GemFire Locator is a lightweight process that provides system coordination. The Locator allows new members, such as servers, other locators, and clients, to discover the existing members of a cluster. The Locator also provides load-balancing information that steers client connections to servers.  
+A Tanzu GemFire Locator is a lightweight process that provides system coordination. The Locator enables new members, such as servers, other locators, and clients, to discover the existing members of a cluster. The Locator also provides load-balancing information that steers client connections to servers.  
 A Locator performs two core functions. A concurrent service running inside the same process handles each function:
 
 - **Peer Locator.** Handles cluster member discovery. The Peer Locator helps new servers and locators find and join the distributed system, and it maintains the membership list and a consistent, shared view of the cluster.
@@ -10,7 +10,7 @@ A Locator performs two core functions. A concurrent service running inside the s
 ## <a id="split-brain-protection"></a> Locators and network-partition ("split-brain") protection
 
 Running two or more locators removes the Locator tier as a single point of failure for discovery and coordination. This locator redundancy does not, by itself, prevent a split-brain. GemFire's network-partition detection, not locator redundancy, provides split-brain protection. The `enable-network-partition-detection` property enables this detection by default. Clusters that use partitioned or persistent regions require this detection to be enabled. Under this mechanism, the oldest member acts as the membership coordinator, preferably a Locator. Each member contributes a weight to quorum calculations: a Locator weighs 3, a cache server weighs 10, and the lead server weighs 15. If a single membership-view change causes a loss of 51 percent or more of the total member weight, GemFire declares a network partition. The losing side then shuts itself down to preserve consistency. Deploying multiple locators and at least three cache servers gives this weighting mechanism enough members to make a correct, deterministic decision.  
-For more details refer to the [official documentation](https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire/10-1/gf/managing-network_partitioning-membership_coordinators_lead_members_and_weighting.html).
+For more details see the [official documentation](https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire/10-1/gf/managing-network_partitioning-membership_coordinators_lead_members_and_weighting.html).
 
 ## <a id="locator-recommendations"></a> Recommendations for deploying Locators
 

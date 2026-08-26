@@ -83,7 +83,7 @@ When to use:
 
 - All GemFire clients run inside the same Project, on the same or different VPCs.
 
-- Cross-VPC communication is required within the Project, without exposing those networks outside the Project boundary.
+- You must enable cross-VPC communication within the Project, without exposing those networks outside the Project boundary.
 
 WAN Replication Characteristics:
 
@@ -103,11 +103,11 @@ When to use:
 
 - Routing between clusters or clients must occur over northbound L3 paths rather than east-west overlay transport, because the environments do not share a common Geneve fabric.
 
-- WAN replication or client access is required across administrative or regional boundaries where only traditional routed L3 connectivity exists.
+- You must configure WAN replication or client access across administrative or regional boundaries where only traditional routed L3 connectivity exists.
 
 WAN Replication Characteristics:
 
-- This topology is required for cross-Region or cross-NSX-domain replication. NSX overlays cannot stretch between Regions or between NSX Managers, so Private VPC or Private TGW segments are not reachable from a remote Region.
+- You must configure this topology for cross-Region or cross-NSX-domain replication. NSX overlays cannot stretch between Regions or between NSX Managers, so Private VPC or Private TGW segments are not reachable from a remote Region.
 
 - You must advertise Public prefixes to the Tier-0 and export them to the physical WAN so that Gateway Senders can initiate connections to remote Gateway Receivers, and remote clusters can reach each Locator and Cache Server on its real, non-NATed IP.
 
@@ -125,7 +125,7 @@ GemFire clusters can be hosted on any of the overlay networks above. Regardless 
 
 - If you deploy multiple GemFire clusters in the same NSX Project, use a separate segment or VPC per cluster for isolation, but avoid unnecessary segmentation inside a single cluster unless a clear security requirement exists.
 
-- Secure and restrict access with Distributed Firewall (DFW) rules scoped to the segments and subnets hosting GemFire. Open only the required ports between Locators, Servers, and WAN peers. See Port Configuration for Tanzu GemFire.
+- Secure and restrict access with Distributed Firewall (DFW) rules scoped to the segments and subnets hosting GemFire. Open only the required ports between Locators, Servers, and WAN peers. See [Port Configuration for Tanzu GemFire](#port-configuration).
 
 #### Client/server connection model (how clients reach the cluster)
 
@@ -147,7 +147,9 @@ GemFire clusters can be hosted on any of the overlay networks above. Regardless 
 
 - GSLB in this design is DNS-only. GSLB resolves clients to Locator endpoints, and clients then connect directly to Locators and Servers on their real IPs.
 
-**Socket and buffer tuning** (relevant when planning ephemeral-port ranges and DFW rules)
+### <a id="socket-tuning"></a> Socket and buffer tuning
+
+These settings are relevant when planning ephemeral-port ranges and DFW rules.
 
 - GemFire assigns *ephemeral* ports for peer membership and TCP failure detection. Behind a firewall, constrain the `membership-port-range` to a bounded window and pin `tcp-port` per member, then open exactly that range between members.
 
@@ -195,7 +197,7 @@ Based on the preceding recommendations and topology options, the following table
 | Client data-path reachability | Ensure clients can reach Locators (discovery) *and* every Cache Server (data) directly; do not place native client traffic behind a VIP/NAT. | Clients use Locators only for discovery, then open direct pool connections to servers; single-hop connects to every data-hosting server. | Prevents connection failures and broken single-hop routing; keeps the L4/L7 VIP scoped to the HTTP/REST path only. |
 | Intra-region WAN: clusters in the same VPC | When primary and secondary clusters are in the same VPC, place all locators and servers on private VPC segments. | Both clusters share the same NSX overlay and Project/TGW; routing is straightforward and stays within the VPC's private address space. | Satisfies requirement for local IP reachability while allowing clusters to be in different AZs / vSphere clusters within the region. |
 | Intra-region WAN: clusters in different VPCs (same Project) | When clusters are in different VPCs but the same Project, host GemFire components on private Transit Gateway (TGW) segments rather than per-VPC segments. | TGW segments are reachable from multiple VPCs attached to the Project TGW, but routes are not advertised beyond the Project, maintaining isolation while enabling cross-VPC communication. | Allows GemFire WAN peers in different VPCs to communicate via local IPs without NAT, while preserving Project-level multi-tenancy. |
-| Inter-region WAN | For clusters in different regions (separate NSX managers/overlays), place GemFire components on VPC segments that are advertised from T0 to upstream routers ("public"/externally routable networks). | Overlays are not stretched between regions; L3 routing between advertised subnets is required for reachability. | Provides direct L3 connectivity between member IPs across regions; required for supported multi-region WAN topologies. |
+| Inter-region WAN | For clusters in different regions (separate NSX managers/overlays), place GemFire components on VPC segments that are advertised from T0 to upstream routers ("public"/externally routable networks). | Overlays are not stretched between regions; you must configure L3 routing between advertised subnets for reachability. | Provides direct L3 connectivity between member IPs across regions; this topology requires supported multi-region WAN topologies. |
 | Inter-region routing behavior | Ensure end-to-end L3 reachability between GemFire subnets across regions, without stateful NAT on GemFire ports; use routing/ACLs instead. | Preserves true member IPs end-to-end, avoids session breakage, and simplifies WAN gateway configuration. | WAN gateways can connect reliably; reduces operational complexity in diagnosing replication issues. |
 | Network quality for WAN links | Design WAN paths with sufficient bandwidth and low, predictable latency between regions/cluster sites. | WAN replication throughput and queue drain time are directly affected by RTT, jitter, and available bandwidth. | Critical for keeping secondary clusters current, minimizing lag and recovery time in failover scenarios.  |
 | NSX and overlay use | Use NSX VPC/Projects, VPC Gateways, and TGW as the routing fabric; central T0 provides north-south connectivity. | Aligns with VCF 9 VPC model (VPC Gateway to TGW to centralized T0), and keeps GemFire traffic within well-defined routing domains. | Ensures that GemFire clusters can be placed flexibly across AZs/VPCs while maintaining supported network semantics.  |
@@ -214,13 +216,15 @@ Beginning with **GemFire 10.2**, the metrics architecture changed, and this chan
 
 - If cluster security is enabled, the metrics endpoint requires the `CLUSTER:READ` permission and honors the cluster's TLS/SSL configuration. The scraper, Prometheus or GMC, must be permitted and, where applicable, present valid credentials or certificates.
 
-**Firewall implications:** the monitoring path requires that the Prometheus server, or GMC's embedded Prometheus, reach **every** GemFire member on `http-service-port` (7070). This requirement applies in addition to any existing REST or management use of port 7070. The `/metrics` traffic is HTTP(S), and you must not NAT it away from the member's real IP, since Prometheus targets the members directly.
+### <a id="metrics-firewall-implications"></a> Firewall implications for metrics
+
+The monitoring path requires that the Prometheus server, or GMC's embedded Prometheus, reach **every** GemFire member on `http-service-port` (7070). This requirement applies in addition to any existing REST or management use of port 7070. The `/metrics` traffic is HTTP(S), and you must not NAT it away from the member's real IP, since Prometheus targets the members directly.
 
 ## <a id="firewall-requirements"></a> Firewall Requirements for Tanzu GemFire
 
 The following table lists the minimum firewall rules needed to support communication between components in the architecture.
 
-**Note** The following firewall requirements assume that all GemFire components are on a single network. If your design uses multiple networks or DFW, refer to the next section, [Port Configuration for Tanzu GemFire](#port-configuration).
+The following firewall requirements assume that all GemFire components are on a single network. If your design uses multiple networks or DFW, see the next section, [Port Configuration for Tanzu GemFire](#port-configuration).
 
 | Source | Destination | Protocol:Port | Description |
 | ----- | ----- | ----- | ----- |
@@ -235,9 +239,13 @@ The following table lists the minimum firewall rules needed to support communica
 | Prometheus / GMC embedded Prometheus | GemFire members (Locators + Servers) | TCP:7070 | Scrapes the `/metrics` endpoint on each member's `http-service-port`. (Scrape path varies by monitoring deployment mode — to be finalized in the monitoring section.) |
 | Management Console (GMC) | External Prometheus server | TCP:9090 | PromQL queries to render dashboards (only when an external Prometheus is used). |
 
-**Note on port numbers:** All GemFire port numbers in this table are the product **defaults** for Tanzu GemFire 10.3. If you have changed any corresponding setting in your deployment, substitute your configured value. Port Configuration for Tanzu GemFire documents the setting name and how to change each port, and is the authoritative reference for these flows. The GMC web UI port and the Prometheus port are likewise defaults, `8080` via `server.port` and `9090` for Prometheus, and you should replace them if you have overridden them.
+### <a id="port-number-defaults"></a> Port number defaults
 
-**Optional — NSX ALB GSLB (DNS-based multi-region failover):** GemFire is never placed behind a load-balancer VIP. Native clients always connect directly to Locators and Servers on their real IPs. NSX Advanced Load Balancer is an **optional** component, integrated only as a Global Server Load Balancer (GSLB) to automate multi-region failover.
+All GemFire port numbers in this table are the product defaults for Tanzu GemFire 10.3. If you have changed any corresponding setting in your deployment, substitute your configured value. [Port Configuration for Tanzu GemFire](#port-configuration) documents the setting name and how to change each port, and is the authoritative reference for these flows. The GMC web UI port and the Prometheus port are likewise defaults (`8080` via `server.port` and `9090` for Prometheus), and you should replace them if you have overridden them.
+
+### <a id="optional-gslb"></a> Optional: NSX ALB GSLB (DNS-based multi-region failover)
+
+GemFire is never placed behind a load-balancer VIP. Native clients always connect directly to Locators and Servers on their real IPs. NSX Advanced Load Balancer is an optional component, integrated only as a Global Server Load Balancer (GSLB) to automate multi-region failover.
 
 In this role, GSLB acts purely as an intelligent DNS router. GSLB resolves the cluster's domain name to the real IPs of the active Locators and is never inline on the data path, so GSLB introduces no bottleneck or single point of failure in the data path. If you adopt GSLB, two additional flows apply:
 
@@ -246,7 +254,7 @@ In this role, GSLB acts purely as an intelligent DNS router. GSLB resolves the c
 | Native Clients | GSLB VIP (NSX ALB) | UDP/TCP:53 | DNS resolution of the cluster domain name to the active Locators' real IPs. |
 | GSLB (NSX ALB) | GemFire Locators (primary + standby regions) | TCP:10334 | Health probes that verify Locator availability and steer DNS toward the active region. |
 
-GSLB is optional. A manual DNS override or application-level configuration achieves the same client-side result. NSX ALB's own management-plane connectivity, including vCenter, AD/LDAP, and Service Engine lifecycle, is out of scope for GemFire documentation.
+A manual DNS override or application-level configuration achieves the same client-side result. NSX ALB's own management-plane connectivity, including vCenter, AD/LDAP, and Service Engine lifecycle, is out of scope for GemFire documentation.
 
 ## <a id="port-configuration"></a> Port Configuration for Tanzu GemFire
 
@@ -255,7 +263,7 @@ If your environment uses segmented networks or DFW, ensure the following port co
 | Name | Source to Destination | Protocol | Default | Configuration | Description |
 |---|---|---|---|---|---|
 | Locator Port | Clients, Cluster members to Locator | TCP | `10334` | `--port` on `gfsh start locator` (or `start-locator` for embedded locators) | Cluster discovery and client bootstrap. Clients contact Locators only for discovery and load information, not for the steady-state data path. |
-| Cache Server Port | Client applications to Server;  Server <-> Server | TCP | `40404` | `port` in `<cache-server>` (cache.xml), the `CacheServer` API, or `--port` on `gfsh start server` | Native client pool and subscription connections, and server-to-server communication. This is the direct client data path (after Locator discovery). |
+| Cache Server Port | Client applications to Server;  Server <-> Server | TCP | `40404` | `port` in `<cache-server>` (cache.xml), the `CacheServer` API, or `--port` on `gfsh start server` | Native client pool and subscription connections, and server-to-server communication. This acts as the direct client data path (after Locator discovery). |
 | HTTP Service Port | REST clients, Management Console, Prometheus to Locator / Server | TCP (HTTP/HTTPS) | `7070` | `http-service-port` in gemfire.properties | Serves the REST management/developer API and the Prometheus `/metrics` endpoint (GemFire 10.2 or later). Enable on Servers with `--start-rest-api`; on Locators via `enable-management-rest-service` (default `true`). Must be open wherever REST or metrics scraping is used. |
 | Membership Port Range | Servers and Locators <-> Servers and Locators (same cluster) | TCP | `41000-61000` | `membership-port-range` in gemfire.properties | Ephemeral ports for peer membership and TCP failure detection. Must be open bidirectionally between all Servers and Locators of the same cluster. Narrow this range behind a firewall, sized for member count × per-thread sockets (see `conserve-sockets`). |
 | TCP Port | Servers and Locators <-> Servers and Locators | TCP | ephemeral (OS-assigned) | `tcp-port` in gemfire.properties | Direct TCP port for peer cache communications. If `0`, the OS selects a port; pin it per member behind a firewall so the assigned ports can be allowed. |

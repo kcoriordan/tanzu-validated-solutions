@@ -18,7 +18,7 @@ A Tanzu GemFire Server is a process that hosts data regions, performs read and w
 
 - **Choose region types deliberately:** partitioned regions for scalable data distribution, replicated regions for smaller, critical datasets.
 
-- **Allocate dedicated CPU and memory** to handle data-intensive workloads efficiently. See the [Platform Recommendations](#platform-recommendations-for-tanzu-gemfire-on-vsphere) section.
+- **Allocate dedicated CPU and memory** to handle data-intensive workloads efficiently. See the [Platform Recommendations](./platform-recommendations-for-tanzu-gemfire-on-vsphere.md) section.
 
 - **In WAN environments,** ensure stable, low-latency links between sites for reliable replication.
 
@@ -75,7 +75,9 @@ Summary:
 
 - Best for small to medium data volumes.
 
-**Region variants.** All region types are built on the partitioned or replicated models, with added capabilities. Common variants include `PARTITION_PERSISTENT`, which is partitioned with disk persistence, `REPLICATE_PERSISTENT`, which is replicated with disk persistence, and `LOCAL`, which is confined to a single member and not distributed.
+### <a id="region-variants"></a> Region variants
+
+All region types are built on the partitioned or replicated models, with added capabilities. Common variants include `PARTITION_PERSISTENT`, which is partitioned with disk persistence, `REPLICATE_PERSISTENT`, which is replicated with disk persistence, and `LOCAL`, which is confined to a single member and not distributed.
 
 
 ## <a id="gateway-senders-receivers"></a> Tanzu GemFire Gateway Senders and Receivers

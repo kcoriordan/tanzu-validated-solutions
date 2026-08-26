@@ -18,7 +18,7 @@ Projects act as administrative and logical boundaries, allowing isolated environ
 
   - Enterprise Administrator ("Enterprise Admin") can create and configure custom Projects as needed.
 
-  - Resource Allocation: Projects can have quotas set for various resources, such as IP addresses, subnets, and security groups, to prevent overconsumption and ensure fair distribution.
+  - Resource Allocation: You can set quotas on Project resources, such as IP addresses, subnets, and security groups, to prevent overconsumption and ensure fair distribution.
 
   - Isolation: Each project operates independently, ensuring that configurations and policies do not overlap or interfere with other projects.
 
@@ -26,7 +26,7 @@ Projects act as administrative and logical boundaries, allowing isolated environ
 
   - Integration with NSX-T Components: Projects integrate seamlessly with other NSX-T components, including Virtual Private Clouds (VPCs), segments, and security policies, to provide a comprehensive network management solution.
 
-For more details on Projects in NSX-T, refer to [official documentation](https://techdocs.broadcom.com/us/en/vmware-cis/vcf/vcf-9-0-and-later/9-0/advanced-network-management/administration-guide/nsx-multi-tenancy/nsx-projects.html).
+For more details on Projects in NSX-T, see [official documentation](https://techdocs.broadcom.com/us/en/vmware-cis/vcf/vcf-9-0-and-later/9-0/advanced-network-management/administration-guide/nsx-multi-tenancy/nsx-projects.html).
 
 ### <a id="vpcs"></a> VPCs within Projects
 
@@ -37,7 +37,7 @@ Each VPC encapsulates logical segments, routing, gateway configurations, and ass
 
   - An NSX VPC is a logical, isolated network domain created within an NSX Project. An NSX VPC enables fine-grained tenancy boundaries and policy-based control by application, service, or business unit.
 
-  - Each VPC maintains its own gateway, IP address blocks, routing configuration, and security and NAT policies. Each VPC also maintains its own resource quotas, ensuring workload and policy isolation as well as delegated management for specific teams.
+  - Each VPC maintains its own gateway, IP address blocks, routing configuration, security, and NAT policies. Each VPC also maintains its own resource quotas, ensuring workload and policy isolation and enabling delegated management for specific teams.
 
   - VPCs use upstream provider constructs from their parent Project, such as Tier-0 Gateways and edge clusters, to provide scalable and secure north–south connectivity to external networks.
 
@@ -53,7 +53,7 @@ Each VPC encapsulates logical segments, routing, gateway configurations, and ass
 
   - The VPC or Security Admins define security policies to protect workloads.
 
-	For more details on VPCs in NSX-T, refer to [official documentation](https://techdocs.broadcom.com/us/en/vmware-cis/vcf/vcf-9-0-and-later/9-0/advanced-network-management/administration-guide/virtual-private-cloud-in-nsx/virtual-private-clouds-overview.html).
+	For more details on VPCs in NSX-T, see [official documentation](https://techdocs.broadcom.com/us/en/vmware-cis/vcf/vcf-9-0-and-later/9-0/advanced-network-management/administration-guide/virtual-private-cloud-in-nsx/virtual-private-clouds-overview.html).
 
 ### <a id="subnet-types"></a> Types of Subnet on VPCs
 

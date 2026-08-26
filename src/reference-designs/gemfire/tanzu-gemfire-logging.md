@@ -125,7 +125,9 @@ When customizing `log4j2.xml`, observe these product-specific caveats from the G
 
   Removing the `GeodeAlert` reference, ALERT, disables alert federation to JMX and the Management Console, and removing the `GeodeLogWriter` reference, LOGWRITER, stops writing the standard member log files. Add new appenders, such as Syslog, alongside the GemFire appenders, rather than replacing them.
 
-**Declaring GemFire's custom appenders.** When writing your own `log4j2.xml`, define the GemFire log pattern and declare the custom appenders as shown below. Note that `GeodeAlert` does not take a PatternLayout.
+#### <a id="custom-appenders"></a> Declaring GemFire's custom appenders
+
+When writing your own `log4j2.xml`, define the GemFire log pattern and declare the custom appenders as shown below. Note that `GeodeAlert` does not take a PatternLayout.
 
 ```xml
 <Properties>

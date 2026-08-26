@@ -12,28 +12,21 @@ In addition to failure resilience, the architecture supports scalability, allowi
 
     The deployment spans two geographic regions to provide strong resilience and fault tolerance.
 
-   1. Region 1 includes two Availability Zones (AZs), each implemented as an independent vSphere cluster with its own compute resources, VMware Distributed Switch (VDS), and storage. Although the diagram illustrates vSAN, you can use any vSphere-supported datastore, such as vSAN, NFS, VMFS, or vVols.
-
-      **Note** If you use GemFire features such as Persistence and Overflow, use storage types with low latency and high IOPS, such as vSAN, SSDs, direct-attached storage, or optimized block devices. You can use NFS, but Broadcom generally does not recommend NFS for primary persistent storage in high-throughput GemFire environments, due to potential network and latency bottlenecks.
+   1. Region 1 includes two Availability Zones (AZs), each implemented as an independent vSphere cluster with its own compute resources, VMware Distributed Switch (VDS), and storage. Although the diagram illustrates vSAN, you can use any vSphere-supported datastore, such as vSAN, NFS, VMFS, or vVols. If you use GemFire features such as Persistence and Overflow, use storage types with low latency and high IOPS, such as vSAN, SSDs, direct-attached storage, or optimized block devices. You can use NFS, but Broadcom generally does not recommend NFS for primary persistent storage in high-throughput GemFire environments, due to potential network and latency bottlenecks.
 
    2. Region 2 is designed as a simplified disaster recovery site with a single AZ.
 
 2. Workload Domain and vCenter Placement
 
-   All AZs within a region are grouped under a single workload domain, managed by a Workload vCenter deployed in the management domain. Each vSphere cluster acts as a separate AZ, providing clear fault isolation and infrastructure-level high availability.
-
-   >**Note**
-   >An alternative design uses a dedicated workload domain and vCenter per AZ. For the purpose of this documentation, the architecture here uses a single workload domain.
+   All AZs within a region are grouped under a single workload domain, managed by a Workload vCenter deployed in the management domain. Each vSphere cluster acts as a separate AZ, providing clear fault isolation and infrastructure-level high availability. An alternative design uses a dedicated workload domain and vCenter per AZ, however, for the purpose of this documentation, the architecture here uses a single workload domain.
 
 3. Consistent Networking Across AZs
 
-   1. NSX-T overlay networking stretches seamlessly across all AZs within each region, providing uniform, software-defined connectivity so GemFire workloads can communicate reliably regardless of their physical placement.
-
-      >**Note** This architecture includes NSX-T constructs such as VPCs and Projects, enabling logical isolation, multi-tenancy, and cleaner organization of network objects within the VCF environment.
+   1. NSX-T overlay networking stretches seamlessly across all AZs within each region, providing uniform, software-defined connectivity so GemFire workloads can communicate reliably regardless of their physical placement. This architecture includes NSX-T constructs such as VPCs and Projects, enabling logical isolation, multi-tenancy, and cleaner organization of network objects within the VCF environment.
 
    2. In environments using VLAN-backed port groups instead of NSX overlays, the topology is equally supported. In such cases, ensure proper L3 routing between AZs and regions so that GemFire nodes can maintain stable, low-latency communication across all failure domains.
 
-4. **Optional** Load Balancing with NSX Advanced Load Balancer
+4. Optional Load Balancing with NSX Advanced Load Balancer
 
    Integrating NSX Advanced Load Balancer (ALB) to act as a Global Server Load Balancer (GSLB) provides automated, multi-region failover for Tanzu GemFire. However, the GSLB operates strictly at the DNS layer, not the data layer.
 
@@ -84,16 +77,16 @@ In addition to failure resilience, the architecture supports scalability, allowi
   With tiered caching, Tanzu GemFire reduces costs by using local memory caches and minimizing the need for frequent database access. This lowers overall transaction costs and improves efficiency by avoiding costly database operations.
 
 - **Single-Hop Capability for Client/Server**  
-  Tanzu GemFire allows clients to directly access the server holding their data, avoiding multiple hops. This improves performance by making data access quicker and more efficient.
+  Tanzu GemFire enables clients to directly access the server holding their data, avoiding multiple hops. This improves performance by making data access quicker and more efficient.
 
 - **Client/Server Security**  
   Each user in a client application is given access to a specific subset of data, enhancing security and control. Users are authenticated with their own credentials, ensuring data privacy and proper access levels across the system.
 
 - **Multisite Data Distribution**  
-  Tanzu GemFire supports data distribution across geographically dispersed sites. Using gateway sender configurations, the system ensures reliable communication between data centers, allowing scalability without sacrificing performance or data consistency.
+  Tanzu GemFire supports data distribution across geographically dispersed sites. Using gateway sender configurations, the system ensures reliable communication between data centers, enabling scalability without sacrificing performance or data consistency.
 
 - **Continuous Querying**  
-  Tanzu GemFire allows complex queries to run continuously, enabling real-time data updates for applications. This is achieved through Object Query Language, which simplifies querying for dynamic, real-time data processing.
+  Tanzu GemFire continuously runs complex queries, enabling real-time data updates for applications. Object Query Language (OQL) achieves this by simplifying queries for dynamic, real-time data processing.
 
 - **Heterogeneous Data Sharing**  
   Applications written in different languages (C#, C++, Java) can share business objects seamlessly without needing complex transformation layers. Changes in one application automatically trigger updates in others, facilitating smooth integration between different platforms.

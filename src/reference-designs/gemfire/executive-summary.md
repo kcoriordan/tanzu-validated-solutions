@@ -4,7 +4,7 @@ VMware Tanzu GemFire is an in-memory, distributed data management platform. Tanz
 
 VMware Cloud Foundation (VCF) 9 provides the modern, full-stack software-defined infrastructure on which Tanzu GemFire can run with enterprise-grade performance and resiliency. Combining compute, storage, networking and security with integrated lifecycle automation, VCF 9 delivers a consistent operational model across private and hybrid clouds.
 
-Running Tanzu GemFire on VCF 9 allows organizations to consolidate and modernize their data services platform. Tanzu GemFire on VCF 9 simplifies deployment, automates scaling, and ensures consistent governance across workload domains. The platform leverages vSphere, vSAN, and NSX to deliver secure, high-performance infrastructure for distributed caching and data grid workloads.
+Running Tanzu GemFire on VCF 9 enables organizations to consolidate and modernize their data services platform. Tanzu GemFire on VCF 9 simplifies deployment, automates scaling, and ensures consistent governance across workload domains. The platform leverages vSphere, vSAN, and NSX to deliver secure, high-performance infrastructure for distributed caching and data grid workloads.
 
 This reference architecture demonstrates how to deploy Tanzu GemFire on a vSphere Workload Cluster within VCF 9. This deployment delivers a highly available, fault-tolerant Active-Standby/ActiveActive architecture with WAN replication across sites. This document details the logical design, network integration, and management and monitoring components that underpin a resilient GemFire deployment.
 
@@ -12,8 +12,9 @@ By optionally integrating with NSX Advanced Load Balancer (ALB), the architectur
 
 This document outlines architecture principles, deployment topology, and operational best practices for building a scalable, performant, and resilient Tanzu GemFire platform on VCF 9. This document provides guidance for platform engineers, architects, and operations teams to design and operate GemFire clusters optimized for reliability, elasticity, and enterprise integration.
 
->**Note**
->Configuration, lifecycle management, and scaling considerations for core VCF components such as vCenter, NSX, and SDDC Manager are beyond the scope of this document. For environment-specific guidance, refer to the official VMware Cloud Foundation documentation or consult VMware Solution Engineering teams.
+### <a id="out-of-scope"></a> Out of scope
+
+Configuration, lifecycle management, and scaling considerations for core VCF components such as vCenter, NSX, and SDDC Manager are beyond the scope of this document. For environment-specific guidance, see the official VMware Cloud Foundation documentation or consult VMware Solution Engineering teams.
 
 For context, this document includes a high-level overview of the underlying vSphere platform components to illustrate the integration points for Tanzu GemFire within VCF 9.
 

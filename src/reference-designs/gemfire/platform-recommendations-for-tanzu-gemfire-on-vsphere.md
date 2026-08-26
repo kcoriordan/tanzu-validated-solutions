@@ -15,8 +15,7 @@ For latency-sensitive, data-intensive workloads such as **Tanzu GemFire cache se
 | Node Interleaving | Disabled | Preserves NUMA locality; required for predictable memory access latency. |
 | Hyper-Threading | Enabled | GEMFire benefits from additional logical threads for serialization, messaging, and GC activity. |
 
->**Note**
->Settings may vary slightly depending on your hardware make and model. Use the settings above or equivalents as needed.
+Settings may vary slightly depending on your hardware make and model. Use the settings above or equivalents as needed.
 
 ## <a id="vm-configuration"></a> Virtual Machine Configuration Guidelines (Tanzu GemFire Cache Servers & Locators)
 
@@ -80,7 +79,7 @@ Efficient memory allocation is critical for stable and predictable Tanzu GemFire
 
 ### <a id="vm-memory-reservation"></a> Virtual Machine Memory Reservation
 
-Full memory reservation is required for GemFire components:
+You must provide full memory reservation for GemFire components:
 
 - Configure a **100% memory reservation** for every GemFire VM.
 
@@ -150,8 +149,9 @@ Supported Java versions for Tanzu GemFire 10.3. JDK 17 is the minimum and baseli
 | 21 | latest | 21 |
 | 25 | latest | 25 |
 
-**Note**
->Tanzu GemFire runs on JDK 21 and JDK 25 but does not support virtual threads on those versions.
+#### <a id="virtual-threads-support"></a> Java virtual threads support
+
+Tanzu GemFire runs on JDK 21 and JDK 25 but does not support virtual threads on those versions.
 
 ### <a id="systemd-prerequisite"></a> systemd Prerequisite
 
@@ -202,7 +202,7 @@ ethtool -C vmnicX rx-usecs 0 rx-frames 1 rx-usecs-irq 0 rx-frames-irq 0
 
 Replace vmnicX with your NIC name, which you can verify using `esxcli network nic list`. If you restart the ESXi host, you must reapply this configuration.
 
-**Note** This type of tuning benefits Tanzu GemFire workloads, but it can negatively impact other non-GemFire workloads that are memory-throughput-bound rather than latency-sensitive. This tuning can also defeat the benefits of Large Receive Offload (LRO), because some physical NICs, such as Intel 10GbE NICs, automatically deactivate LRO when you deactivate interrupt coalescing. For more information, see [Understanding TCP Segmentation Offload (TSO) and Large Receive Offload (LRO) in the vSphere environment](https://knowledge.broadcom.com/external/article?articleNumber=318877).
+This type of tuning benefits Tanzu GemFire workloads, but it can negatively impact other non-GemFire workloads that are memory-throughput-bound rather than latency-sensitive. This tuning can also defeat the benefits of Large Receive Offload (LRO), because some physical NICs, such as Intel 10GbE NICs, automatically deactivate LRO when you deactivate interrupt coalescing. For more information, see [Understanding TCP Segmentation Offload (TSO) and Large Receive Offload (LRO) in the vSphere environment](https://knowledge.broadcom.com/external/article?articleNumber=318877).
 
 ### <a id="virtual-nic"></a> Virtual NIC Configuration (VM Level)
 
@@ -238,13 +238,15 @@ sudo vi /etc/sysctl.conf
 sudo sysctl -p
 ```
 
-**Security note** To maintain protection against denial-of-service attacks, deploy GemFire clusters behind firewalls, load balancers, or network intrusion prevention systems (NIPS) instead of relying on SYN cookies.
+### <a id="security-considerations"></a> Security considerations
+
+To maintain protection against denial-of-service attacks, deploy GemFire clusters behind firewalls, load balancers, or network intrusion prevention systems (NIPS) instead of relying on SYN cookies.
 
 ### <a id="throughput-latency-config"></a> High throughput and latency configurations (Guest OS)
 
 GemFire systems often handle extremely high transaction volumes and move large amounts of traffic through the network. Maximizing network throughput is therefore a primary design goal. The following options assume TCP over IPv4:
 
-- Increasing TCP's initial congestion window allows TCP to transfer more data in the first round trip and accelerates window growth. This increase is especially important for bursty, short-lived connections.
+- Increasing TCP's initial congestion window enables TCP to transfer more data in the first round trip and accelerates window growth. This increase is especially important for bursty, short-lived connections.
 
 - Increasing the size of the transmit queue can also help TCP throughput.
 
@@ -261,11 +263,11 @@ Additional guest OS TCP tuning:
 
 - Disabling TCP Slow-Start After Idle improves the performance of long-lived TCP connections that transfer data in bursts.
 
-- Enabling Window Scaling (RFC 1323) increases the maximum receive window size and allows high-latency connections to achieve better throughput.
+- Enabling Window Scaling (RFC 1323) increases the maximum receive window size and enables high-latency connections to achieve better throughput.
 
 - Enabling TCP Low Latency tells the operating system to sacrifice throughput for lower latency. For latency-sensitive workloads like GemFire, this tradeoff is acceptable and can improve performance.
 
-- Enabling TCP Fast Open allows the client to send application data in the initial SYN packet in certain situations. TFO is a newer optimization that requires support on both clients and servers, and it may not be available on all operating systems.
+- Enabling TCP Fast Open enables the client to send application data in the initial SYN packet in certain situations. TFO is a newer optimization that requires support on both clients and servers, and it may not be available on all operating systems.
 
 ```
 sudo vi /etc/sysctl.conf
@@ -370,7 +372,7 @@ To achieve predictable low-latency performance, size GemFire VMs to maintain NUM
 
 - ESXi automatically places these VMs on a single NUMA node to ensure memory locality and minimize cross-node access penalties.
 
-- When you size GemFire VMs below this threshold, for example 8 to 16 vCPUs on hosts with 20 or more cores per NUMA node, and 256 GB on hosts with 512 GB per NUMA node, no vNUMA exposure is required, and ESXi schedules the VM entirely within one NUMA node.
+- When you size GemFire VMs below this threshold, for example 8 to 16 vCPUs on hosts with 20 or more cores per NUMA node, and 256 GB on hosts with 512 GB per NUMA node, vNUMA exposure is unnecessary, and ESXi schedules the VM entirely within one NUMA node.
 
 - No manual NUMA configuration is needed for smaller VMs, and overriding NUMA placement is discouraged.
 
@@ -466,7 +468,7 @@ Risks to account for:
 
 - Set `recovery-delay` from a measured restart budget, not a guess. Time the real worst case in your environment, including HA failure detection, VM power-on, guest boot, systemd service start, JVM warm-up, and persistence reload. Take the upper end, and add margin, so that the surviving nodes never begin the first recovery.
 
-- Keep `member-timeout` comfortably above expected pause times so that detection is not itself premature. This is also why the ZGC or Generational ZGC recommendation matters.
+- Keep `member-timeout` comfortably above expected pause times to prevent premature detection. This is also why the ZGC or Generational ZGC recommendation matters.
 
 - Run each member as a bounded systemd service, ordered after networking and time synchronization.
 

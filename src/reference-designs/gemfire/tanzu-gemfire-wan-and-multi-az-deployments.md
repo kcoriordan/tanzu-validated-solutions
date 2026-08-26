@@ -4,8 +4,8 @@ Tanzu GemFire supports flexible deployment topologies to meet a variety of avail
 
 ## <a id="wan-replication"></a> WAN Replication (Geographical Level)
 
-WAN replication allows Tanzu GemFire clusters located in different geographic regions to exchange data asynchronously.  
-Each site runs as an independent GemFire cluster, with its own locators, servers, and regions, and uses Gateway Senders and Gateway Receivers to replicate events between clusters over a wide-area network. Use this model when sites are far enough apart that a single synchronous, or stretched, cluster is impractical. In practice, this means round-trip latency above the single-cluster ceiling described in Multi-AZ Deployment below, commonly tens of milliseconds or more between regions. Because WAN replication is asynchronous, local performance is unaffected by network latency.
+WAN replication enables Tanzu GemFire clusters located in different geographic regions to exchange data asynchronously.  
+Each site runs as an independent GemFire cluster, with its own locators, servers, and regions, and uses Gateway Senders and Gateway Receivers to replicate events between clusters over a wide-area network. Use this model when sites are far enough apart that a single synchronous, or stretched, cluster is impractical. In practice, this means round-trip latency above the single-cluster ceiling described in [Multi-AZ Deployment](#multi-az-deployment) below, commonly tens of milliseconds or more between regions. Because WAN replication is asynchronous, local performance is unaffected by network latency.
 
 Key characteristics:
 
@@ -55,7 +55,7 @@ Example:
 
 - With the `redundancy-zone` configured correctly, GemFire places primary and redundant copies in different zones.
 
-  See Configuring Redundancy Zones.
+  See [Configuring Redundancy Zones](#redundancy-zones).
 
 - If one zone fails, the cluster continues operating from replicas in the surviving zones.
 

@@ -53,5 +53,5 @@ Here are some general recommendations to guide your capacity planning:
 
   - NAS: Not recommended due to performance and resilience issues.
 
-For more information on sizing, refer to [Vertical Sizing](https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire/10-3/gf/configuring-cluster_config-cluster_sizing.html#step-3:-vertical-sizing).
+For more information on sizing, see [Vertical Sizing](https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire/10-3/gf/configuring-cluster_config-cluster_sizing.html#step-3:-vertical-sizing).
 
