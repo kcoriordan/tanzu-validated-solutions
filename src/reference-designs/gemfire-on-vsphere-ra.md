@@ -27,31 +27,13 @@ The following infrastructure components and software versions validate the proce
 | Tanzu GemFire | 10.1.3 |
 | Tanzu GemFire Management Console | 1.3.1 |
 
-## <a id="ra-contents"></a> Reference architecture contents
-
-The *Deploy and Manage VMware Tanzu GemFire on vSphere* reference architecture is divided into the following sections:
-
-- [Executive Summary](./gemfire/executive-summary.md)
-- [VCF Design Blueprints and Deployment Topologies](./gemfire/vcf-design-blueprints-and-deployment-topologies.md)
-- [Network Overview and Components](./gemfire/network-overview-and-components.md)
-- [Tanzu GemFire on VCF 9 Platform Architecture](./gemfire/tanzu-gemfire-on-vcf-9-platform-architecture.md)
-- [Tanzu GemFire Logical Architecture](./gemfire/tanzu-gemfire-logical-architecture.md)
-- [Tanzu GemFire Network Architecture](./gemfire/tanzu-gemfire-network-architecture.md)
-- [Tanzu GemFire Locators](./gemfire/tanzu-gemfire-locators.md)
-- [Tanzu GemFire Server](./gemfire/tanzu-gemfire-server.md)
-- [Tanzu GemFire WAN and Multi-AZ Deployments](./gemfire/tanzu-gemfire-wan-and-multi-az-deployments.md)
-- [Cluster Sizing Considerations for Tanzu GemFire](./gemfire/cluster-sizing-considerations-for-tanzu-gemfire.md)
-- [Tanzu GemFire Management and Monitoring Tools](./gemfire/tanzu-gemfire-management-and-monitoring-tools.md)
-- [Tanzu GemFire Logging](./gemfire/tanzu-gemfire-logging.md)
-- [Platform Recommendations for Tanzu GemFire on vSphere](./gemfire/platform-recommendations-for-tanzu-gemfire-on-vsphere.md)
-- [References](./gemfire/references.md)
 
 ## <a id="general-references"></a> General References
 
 The following reference materials complement the procedures in the *Deploy and Manage VMware Tanzu GemFire on vSphere* reference architecture.
 
-- [About Tanzu GemFire](https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire/10-1/gf/getting_started-gemfire_overview.html) in the Tanzu GemFire 10.1 documentation.
-- [Installing VMware Tanzu GemFire from a Compressed TAR File on Windows, Unix, and Linux](https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire/10-1/gf/getting_started-installation-install_standalone.html) in the Tanzu GemFire 10.1 documentation.
-- [Tanzu GemFire Management Console Installation](https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire-management-console/1-3/gf-mc/install.html) in the Tanzu GemFire Management Console 1.3 documentation.
+- [About Tanzu GemFire](https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire/10-3/gf/getting_started-gemfire_overview.html) in the Tanzu GemFire 10.3 documentation.
+- [Installing VMware Tanzu GemFire from a Compressed TAR File on Windows, Unix, and Linux](https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire/10-3/gf/getting_started-installation-install_standalone.html) in the Tanzu GemFire 10.3 documentation.
+- [Tanzu GemFire Management Console Installation](https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire-management-console/1-4/gf-mc/install.html) in the Tanzu GemFire Management Console 1.4 documentation.
 - [How do I manually download and install Java for my Windows computer?](https://www.java.com/en/download/help/windows_manual_download.html) in the Java 8.0 documentation.
 - [Apache Maven Installation ](https://maven.apache.org/install.html) in the Apache Maven documentation.
