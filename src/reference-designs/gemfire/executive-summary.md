@@ -12,8 +12,8 @@ By optionally integrating with NSX Advanced Load Balancer (ALB), the architectur
 
 This document outlines architecture principles, deployment topology, and operational best practices for building a scalable, performant, and resilient Tanzu GemFire platform on VCF 9. This document provides guidance for platform engineers, architects, and operations teams to design and operate GemFire clusters optimized for reliability, elasticity, and enterprise integration.
 
-**Note**:  
-Configuration, lifecycle management, and scaling considerations for core VCF components such as vCenter, NSX, and SDDC Manager are beyond the scope of this document. For environment-specific guidance, refer to the official VMware Cloud Foundation documentation or consult VMware Solution Engineering teams.
+>**Note**
+>Configuration, lifecycle management, and scaling considerations for core VCF components such as vCenter, NSX, and SDDC Manager are beyond the scope of this document. For environment-specific guidance, refer to the official VMware Cloud Foundation documentation or consult VMware Solution Engineering teams.
 
 For context, this document includes a high-level overview of the underlying vSphere platform components to illustrate the integration points for Tanzu GemFire within VCF 9.
 

@@ -30,7 +30,7 @@ For more details on Projects in NSX-T, refer to [official documentation](https:/
 
 ### <a id="vpcs"></a> VPCs within Projects
 
-Within each Project, VPCs provide self-contained, policy-driven network environments.  
+Within each Project, VPCs provide self-contained, policy-driven network environments.
 Each VPC encapsulates logical segments, routing, gateway configurations, and associated policies, enabling consistent isolation and governance across environments.
 
 - Key Concepts
@@ -61,8 +61,8 @@ NSX-T VPCs support three main types of subnets, also called VPC subnets.
 
 | Subnet Type | Scope and Description |
 | :---- | :---- |
-| Private VPC (VPC Scoped) | The network is only accessible within the same VPC. No direct external or cross-VPC connectivity. |
-| Private Transit Gateway (TGW) With NSX-T 9.0 and above (Project Scoped) | Routable only among VPCs linked to a shared Transit Gateway(TGW) within the same Project space. |
+| Private VPC(VPC Scoped) | The network is only accessible within the same VPC. No direct external or cross-VPC connectivity. |
+| Private Transit Gateway (TGW) With NSX-T 9.0 and above (Project Scoped) | Routable only among VPCs linked to a shared Transit Gateway(TGW) within the same Project space. |
 | Public (Routed via T0 to Physical L3) | Subnet is advertised externally, provides routed access to/from external or provider networks. |
 
 The diagram below provides a high-level overview of the Projects and Sample VPC Network Model.![image2](./images/image2.png)

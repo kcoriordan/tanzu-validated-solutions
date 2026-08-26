@@ -24,7 +24,6 @@ To size a GemFire cluster effectively, follow these steps:
 
 5. Projection to Full Scale: Use the results from scale-out testing to finalize the configuration for your desired capacity and service-level agreement (SLA).
 
-   
 
 ## <a id="sizing-reference"></a> Sizing Quick Reference
 

@@ -14,7 +14,7 @@ In addition to failure resilience, the architecture supports scalability, allowi
 
    1. Region 1 includes two Availability Zones (AZs), each implemented as an independent vSphere cluster with its own compute resources, VMware Distributed Switch (VDS), and storage. Although the diagram illustrates vSAN, you can use any vSphere-supported datastore, such as vSAN, NFS, VMFS, or vVols.
 
-      **Note:** If you use GemFire features such as Persistence and Overflow, use storage types with low latency and high IOPS, such as vSAN, SSDs, direct-attached storage, or optimized block devices. You can use NFS, but Broadcom generally does not recommend NFS for primary persistent storage in high-throughput GemFire environments, due to potential network and latency bottlenecks.
+      **Note** If you use GemFire features such as Persistence and Overflow, use storage types with low latency and high IOPS, such as vSAN, SSDs, direct-attached storage, or optimized block devices. You can use NFS, but Broadcom generally does not recommend NFS for primary persistent storage in high-throughput GemFire environments, due to potential network and latency bottlenecks.
 
    2. Region 2 is designed as a simplified disaster recovery site with a single AZ.
 
@@ -22,13 +22,14 @@ In addition to failure resilience, the architecture supports scalability, allowi
 
    All AZs within a region are grouped under a single workload domain, managed by a Workload vCenter deployed in the management domain. Each vSphere cluster acts as a separate AZ, providing clear fault isolation and infrastructure-level high availability.
 
-   *Note:* An alternative design uses a dedicated workload domain and vCenter per AZ. For the purpose of this documentation, the architecture here uses a single workload domain.
+   >**Note**
+   >An alternative design uses a dedicated workload domain and vCenter per AZ. For the purpose of this documentation, the architecture here uses a single workload domain.
 
 3. Consistent Networking Across AZs
 
    1. NSX-T overlay networking stretches seamlessly across all AZs within each region, providing uniform, software-defined connectivity so GemFire workloads can communicate reliably regardless of their physical placement.
 
-      Note: This architecture includes NSX-T constructs such as VPCs and Projects, enabling logical isolation, multi-tenancy, and cleaner organization of network objects within the VCF environment.
+      >**Note** This architecture includes NSX-T constructs such as VPCs and Projects, enabling logical isolation, multi-tenancy, and cleaner organization of network objects within the VCF environment.
 
    2. In environments using VLAN-backed port groups instead of NSX overlays, the topology is equally supported. In such cases, ensure proper L3 routing between AZs and regions so that GemFire nodes can maintain stable, low-latency communication across all failure domains.
 

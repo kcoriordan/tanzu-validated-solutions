@@ -127,7 +127,7 @@ GemFire clusters can be hosted on any of the overlay networks above. Regardless 
 
 - Secure and restrict access with Distributed Firewall (DFW) rules scoped to the segments and subnets hosting GemFire. Open only the required ports between Locators, Servers, and WAN peers. See Port Configuration for Tanzu GemFire.
 
-**Client/server connection model** (how clients reach the cluster)
+#### Client/server connection model (how clients reach the cluster)
 
 - In a standard client and server network setup, clients contact Locators strictly to find services and retrieve load details such as startup, membership, and failover handling. Locators never handle the ongoing data traffic.
 
@@ -183,9 +183,7 @@ GemFire clusters can be hosted on any of the overlay networks above. Regardless 
 
 - Ensure the end-to-end path between Regions, including physical routers, firewalls, and WAN links, meets GemFire's latency and bandwidth requirements. WAN replication throughput and catch-up time depend directly on network quality.
 
-
-
-  ## **Network design decisions for GemFire on VCF 9 (NSX VPC/Projects)** 
+## Network design decisions for GemFire on VCF 9 (NSX VPC/Projects)
 
 Based on the preceding recommendations and topology options, the following table summarizes the key network design decisions for deploying GemFire instances on the VCF 9 platform.
 
@@ -204,7 +202,7 @@ Based on the preceding recommendations and topology options, the following table
 
 ## <a id="monitoring-metrics"></a> Monitoring and Metrics Exposure (Prometheus)
 
-The **Tanzu GemFire Management Console (GMC)** provides monitoring for this architecture. GMC is a standalone web application, distributed as a JAR or OCI image. GMC runs alongside the clusters and integrates with a Prometheus server to drive its monitoring dashboards.
+The **Tanzu GemFire Management Console** provides monitoring for this architecture. It is a standalone web application, distributed as a JAR or OCI image. It runs alongside the clusters and integrates with a Prometheus server to drive its monitoring dashboards.
 
 Beginning with **GemFire 10.2**, the metrics architecture changed, and this change has a direct firewall and port impact:
 
@@ -222,7 +220,7 @@ Beginning with **GemFire 10.2**, the metrics architecture changed, and this chan
 
 The following table lists the minimum firewall rules needed to support communication between components in the architecture.
 
-Note: The following firewall requirements assume that all GemFire components are on a single network. If your design uses multiple networks or DFW, refer to the next section, [Port Configuration for Tanzu GemFire](#port-configuration-for-tanzu-gemfire).
+**Note** The following firewall requirements assume that all GemFire components are on a single network. If your design uses multiple networks or DFW, refer to the next section, [Port Configuration for Tanzu GemFire](#port-configuration).
 
 | Source | Destination | Protocol:Port | Description |
 | ----- | ----- | ----- | ----- |

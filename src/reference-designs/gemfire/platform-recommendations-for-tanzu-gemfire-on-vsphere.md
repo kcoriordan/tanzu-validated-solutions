@@ -15,7 +15,8 @@ For latency-sensitive, data-intensive workloads such as **Tanzu GemFire cache se
 | Node Interleaving | Disabled | Preserves NUMA locality; required for predictable memory access latency. |
 | Hyper-Threading | Enabled | GEMFire benefits from additional logical threads for serialization, messaging, and GC activity. |
 
-*Note:* Settings may vary slightly depending on your hardware make and model. Use the settings above or equivalents as needed.
+>**Note**
+>Settings may vary slightly depending on your hardware make and model. Use the settings above or equivalents as needed.
 
 ## <a id="vm-configuration"></a> Virtual Machine Configuration Guidelines (Tanzu GemFire Cache Servers & Locators)
 
@@ -149,7 +150,8 @@ Supported Java versions for Tanzu GemFire 10.3. JDK 17 is the minimum and baseli
 | 21 | latest | 21 |
 | 25 | latest | 25 |
 
-**Note:** Tanzu GemFire runs on JDK 21 and JDK 25 but does not support virtual threads on those versions.
+**Note**
+>Tanzu GemFire runs on JDK 21 and JDK 25 but does not support virtual threads on those versions.
 
 ### <a id="systemd-prerequisite"></a> systemd Prerequisite
 
@@ -200,7 +202,7 @@ ethtool -C vmnicX rx-usecs 0 rx-frames 1 rx-usecs-irq 0 rx-frames-irq 0
 
 Replace vmnicX with your NIC name, which you can verify using `esxcli network nic list`. If you restart the ESXi host, you must reapply this configuration.
 
-**Note:** This type of tuning benefits Tanzu GemFire workloads, but it can negatively impact other non-GemFire workloads that are memory-throughput-bound rather than latency-sensitive. This tuning can also defeat the benefits of Large Receive Offload (LRO), because some physical NICs, such as Intel 10GbE NICs, automatically deactivate LRO when you deactivate interrupt coalescing. For more information, see [Understanding TCP Segmentation Offload (TSO) and Large Receive Offload (LRO) in the vSphere environment](https://knowledge.broadcom.com/external/article?articleNumber=318877).
+**Note** This type of tuning benefits Tanzu GemFire workloads, but it can negatively impact other non-GemFire workloads that are memory-throughput-bound rather than latency-sensitive. This tuning can also defeat the benefits of Large Receive Offload (LRO), because some physical NICs, such as Intel 10GbE NICs, automatically deactivate LRO when you deactivate interrupt coalescing. For more information, see [Understanding TCP Segmentation Offload (TSO) and Large Receive Offload (LRO) in the vSphere environment](https://knowledge.broadcom.com/external/article?articleNumber=318877).
 
 ### <a id="virtual-nic"></a> Virtual NIC Configuration (VM Level)
 
@@ -236,7 +238,7 @@ sudo vi /etc/sysctl.conf
 sudo sysctl -p
 ```
 
-Security note: to maintain protection against denial-of-service attacks, deploy GemFire clusters behind firewalls, load balancers, or network intrusion prevention systems (NIPS) instead of relying on SYN cookies.
+**Security note** To maintain protection against denial-of-service attacks, deploy GemFire clusters behind firewalls, load balancers, or network intrusion prevention systems (NIPS) instead of relying on SYN cookies.
 
 ### <a id="throughput-latency-config"></a> High throughput and latency configurations (Guest OS)
 
