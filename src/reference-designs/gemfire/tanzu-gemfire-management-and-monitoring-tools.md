@@ -48,13 +48,13 @@ Tanzu GemFire Management Console is a browser-based console that streamlines day
 
 ### <a id="gmc-monitoring"></a> Monitoring and observability (Tanzu GemFire 10.2 and 10.3)
 
-Tanzu GemFire Management Console drives its monitoring dashboards from Prometheus rather than by proxying metrics itself. The relevant 10.2 and 10.3 behavior:
+Tanzu GemFire Management Console drives its monitoring dashboards directly from Prometheus rather than proxying the metrics. The relevant 10.2 and 10.3 behavior:
 
 - **Metrics source.** Each member, locator or server, exposes its Prometheus metrics at the `/metrics` path on its HTTP service port, `http-service-port`, which defaults to 7070. This endpoint replaced the earlier per-member "metrics port" model used in 10.1 and earlier. Metric names are the GemFire statistics prefixed with `gemfire_`, for example, `gemfire_gets`.
 
 - **Enablement.** The member serves the endpoint only when its HTTP service is running. Locators enable this through `enable-management-rest-service`, which defaults to `true`. Servers enable this through `--start-rest-api`, which defaults to `false`, so you must enable this explicitly on servers. You control per-member emission with `gemfire.prometheus.metrics.emission`, which accepts `Default`, `All`, or `None`.
 
-- **Prometheus, embedded or external.** Tanzu GemFire Management Console can auto-start an embedded Prometheus server, available only for OVA and OCI distributions, or connect to an external, organization-managed Prometheus instance. When you use Tanzu GemFire Management Console for monitoring and you secure the member metrics endpoints, using a security manager, TLS, or both, Tanzu GemFire Management Console routes external Prometheus scraping requests through itself. Tanzu GemFire Management Console acts as a proxy to satisfy these security and connection constraints.
+- **Prometheus, embedded or external.** Tanzu GemFire Management Console can auto-start an embedded Prometheus server, available only for OVA and OCI distributions, or connect to an external, organization-managed Prometheus instance. When you use Tanzu GemFire Management Console for monitoring and you secure the member metrics endpoints, using a security manager, TLS, or both, Tanzu GemFire Management Console acts as a proxy for external Prometheus scraping requests to satisfy these security and connection constraints.
 
 - **Real-time-only mode.** You can also view metrics directly in Tanzu GemFire Management Console without a Prometheus server. Tanzu GemFire Management Console retains up to 60 minutes of recent data in this mode. This mode is useful for lightweight, live visibility.
 
