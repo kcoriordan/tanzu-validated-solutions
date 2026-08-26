@@ -87,7 +87,7 @@ These components enable asynchronous, multi-site WAN replication, ensuring cross
 
 ### <a id="component-console"></a> Tanzu GemFire Management Console
 
-The Tanzu GemFire Management Console is a standalone web application, shipped as a JAR or OCI image, that serves as the central hub for cluster administration, fleet management, and real-time monitoring. Beyond visualization, the Management Console enables administrators to execute write operations, for example creating regions, deploying JARs, or managing gateways, and perform centralized log searches.
+Tanzu GemFire Management Console is a standalone web application, shipped as a JAR or OCI image, that serves as the central hub for cluster administration, fleet management, and real-time monitoring. Beyond visualization, Tanzu GemFire Management Console enables administrators to execute write operations, for example creating regions, deploying JARs, or managing gateways, and perform centralized log searches.
 
 ### <a id="unified-metrics"></a> Unified Metrics Exposure (GemFire 10.3 Architecture)
 
@@ -101,11 +101,11 @@ Unlike older versions that required dedicated metrics ports, GemFire 10.3 consol
 
 ### <a id="prometheus-grafana"></a> Prometheus and Grafana Integration
 
-The Management Console provides deep observability through a native Prometheus integration.
+Tanzu GemFire Management Console provides deep observability through a native Prometheus integration.
 
-- **Data Collection (Prometheus):** A Prometheus server, either embedded within the Console or managed externally by the organization, acts as the time-series database. This server directly scrapes the /metrics endpoints on the HTTP service ports of the cluster members.
+- **Data Collection (Prometheus):** A Prometheus server, either embedded within Tanzu GemFire Management Console or managed externally by the organization, acts as the time-series database. This server directly scrapes the /metrics endpoints on the HTTP service ports of the cluster members.
 
-- **Management Console Visualization:** The Management Console actively queries Prometheus using PromQL to populate its Monitoring tab. The Console organizes these insights into three core areas: Data (throughput, latencies, cache hit ratios), Cluster (memory, CPU, disk utilization, IO waits), and WAN Gateway (receiver throughput and sender queues). The UI provides a viewing window capped at a 7-day history.
+- **Tanzu GemFire Management Console Visualization:** Tanzu GemFire Management Console actively queries Prometheus using PromQL to populate its Monitoring tab. Tanzu GemFire Management Console organizes these insights into three core areas: Data (throughput, latencies, cache hit ratios), Cluster (memory, CPU, disk utilization, IO waits), and WAN Gateway (receiver throughput and sender queues). The UI provides a viewing window capped at a 7-day history.
 
-- **Grafana Extensibility:** Because Prometheus collects the data natively, organizations can point Grafana directly at the same Prometheus instance. This enables teams to use the full catalog of `gemfire_` metrics to build highly customized, long-term observability dashboards independently of the Management Console.
+- **Grafana Extensibility:** Because Prometheus collects the data natively, organizations can point Grafana directly at the same Prometheus instance. This enables teams to use the full catalog of `gemfire_` metrics to build highly customized, long-term observability dashboards independently of Tanzu GemFire Management Console.
 

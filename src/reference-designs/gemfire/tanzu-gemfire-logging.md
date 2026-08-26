@@ -6,7 +6,7 @@ Tanzu GemFire uses Apache Log4j 2 as its logging framework. Log4j 2 provides a f
 
 - **Log4j 2 Core:** the backend implementation that processes and outputs log messages.
 
-On the Core backend, GemFire runs three custom appenders. `GeodeConsole` handles console output. `GeodeLogWriter` writes the standard member log files, and includes a security variant when `security="true"`. `GeodeAlert` handles alerts that GemFire federates to the JMX management and monitoring system and surfaces in the Management Console.
+On the Core backend, GemFire runs three custom appenders. `GeodeConsole` handles console output. `GeodeLogWriter` writes the standard member log files, and includes a security variant when `security="true"`. `GeodeAlert` handles alerts that GemFire federates to the JMX management and monitoring system and surfaces in Tanzu GemFire Management Console.
 
 You can route the front-end API to any supported Log4j 2 backend. Tanzu GemFire 10.3 works with Log4j 2.18.0 and requires these core JARs in the classpath:
 
@@ -123,7 +123,7 @@ When customizing `log4j2.xml`, observe these product-specific caveats from the G
 
 - Retain the GemFire appenders on which you rely.
 
-  Removing the `GeodeAlert` reference, ALERT, disables alert federation to JMX and the Management Console, and removing the `GeodeLogWriter` reference, LOGWRITER, stops writing the standard member log files. Add new appenders, such as Syslog, alongside the GemFire appenders, rather than replacing them.
+  Removing the `GeodeAlert` reference, ALERT, disables alert federation to JMX and Tanzu GemFire Management Console, and removing the `GeodeLogWriter` reference, LOGWRITER, stops writing the standard member log files. Add new appenders, such as Syslog, alongside the GemFire appenders, rather than replacing them.
 
 #### <a id="custom-appenders"></a> Declaring GemFire's custom appenders
 
@@ -145,7 +145,7 @@ When writing your own `log4j2.xml`, define the GemFire log pattern and declare t
 </Appenders>
 ```
 
-Use the default `log4j2.xml` in your GemFire distribution's `config` directory as the reference for any custom configuration. This forwarding path is the GemFire-side basis for production centralized logging. The Management Console's Logs tab suits quick, live inspection, while a custom `log4j2.xml` is what makes member logs durable, aggregated, and searchable off-host.
+Use the default `log4j2.xml` in your GemFire distribution's `config` directory as the reference for any custom configuration. This forwarding path is the GemFire-side basis for production centralized logging. Tanzu GemFire Management Console's Logs tab suits quick, live inspection, while a custom `log4j2.xml` is what makes member logs durable, aggregated, and searchable off-host.
 
 ### <a id="centralized-logging"></a> Integrating with Centralized Logging Systems
 

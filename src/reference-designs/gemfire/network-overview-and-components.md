@@ -26,7 +26,7 @@ Projects act as administrative and logical boundaries, allowing isolated environ
 
   - Integration with NSX-T Components: Projects integrate seamlessly with other NSX-T components, including Virtual Private Clouds (VPCs), segments, and security policies, to provide a comprehensive network management solution.
 
-For more information on Projects in NSX-T, see [official documentation](https://techdocs.broadcom.com/us/en/vmware-cis/vcf/vcf-9-0-and-later/9-0/advanced-network-management/administration-guide/nsx-multi-tenancy/nsx-projects.html).
+For more information on Projects in NSX-T, see the [VMware Cloud Foundation](https://techdocs.broadcom.com/us/en/vmware-cis/vcf/vcf-9-0-and-later/9-0/advanced-network-management/administration-guide/nsx-multi-tenancy/nsx-projects.html) documentation.
 
 ### <a id="vpcs"></a> VPCs within Projects
 
@@ -53,7 +53,7 @@ Each VPC encapsulates logical segments, routing, gateway configurations, and ass
 
   - The VPC or Security Admins define security policies to protect workloads.
 
-	For more information on VPCs in NSX-T, see [official documentation](https://techdocs.broadcom.com/us/en/vmware-cis/vcf/vcf-9-0-and-later/9-0/advanced-network-management/administration-guide/virtual-private-cloud-in-nsx/virtual-private-clouds-overview.html).
+	For more information on VPCs in NSX-T, see the [VMware Cloud Foundation](https://techdocs.broadcom.com/us/en/vmware-cis/vcf/vcf-9-0-and-later/9-0/advanced-network-management/administration-guide/virtual-private-cloud-in-nsx/virtual-private-clouds-overview.html) documentation.
 
 ### <a id="subnet-types"></a> Types of Subnet on VPCs
 
