@@ -222,7 +222,7 @@ Use VMXNET3 for all GemFire VMs.
 
 Many Linux distributions enable SYN cookies by default. SYN cookies are not compatible with stable, busy GemFire clusters. Normal GemFire traffic incorrectly triggers the SYN cookie protection, which severely limits bandwidth and new-connection rates. This problem is especially disruptive during:
 
-- gfsh connect
+- `gfsh` connect
 
 - Locator handshake
 
@@ -306,7 +306,7 @@ To avoid locator or management endpoint failures:
 
 - Map hostnames correctly to the IP addresses used in the GemFire cluster configuration.
 
-- Misconfigured host entries can break gfsh connectivity and management APIs.
+- Misconfigured host entries can break `gfsh` connectivity and management APIs.
 
 ### <a id="numa-vnuma"></a> NUMA and vNUMA Considerations for Tanzu GemFire VMs
 

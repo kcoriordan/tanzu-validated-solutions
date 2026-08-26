@@ -26,17 +26,17 @@ Installing GemFire on Linux (TAR File):  [Install GemFire Using a Compressed TAR
 
 - Understanding Log Messages and Their Categories (main, child, and metadata logs, and renaming logs on rollover and restart): [https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire/10-3/gf/managing-logging-logging_categories.html](https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire/10-3/gf/managing-logging-logging_categories.html)
 
-## <a id="gfsh-refs"></a> gfsh (Command-Line Interface)
+## <a id="gfsh-refs"></a> `gfsh` (Command-Line Interface)
 
-- Configuring the gfsh Environment (session logging, gfsh.log-level): [https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire/10-3/gf/tools_modules-gfsh-configuring_gfsh.html](https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire/10-3/gf/tools_modules-gfsh-configuring_gfsh.html)
+- Configuring the `gfsh` Environment (session logging, `gfsh`.log-level): [https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire/10-3/gf/tools_modules-gfsh-configuring_gfsh.html](https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire/10-3/gf/tools_modules-gfsh-configuring_gfsh.html)
 
 - change loglevel command (runtime level changes; geode.LOG_LEVEL_UPDATE_OCCURS): [https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire/10-3/gf/tools_modules-gfsh-command-pages-change.html](https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire/10-3/gf/tools_modules-gfsh-command-pages-change.html)
 
-- Running gfsh Commands on the OS Command Line: [https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire/10-3/gf/tools_modules-gfsh-os_command_line_execution.html](https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire/10-3/gf/tools_modules-gfsh-os_command_line_execution.html)
+- Running `gfsh` Commands on the OS Command Line: [https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire/10-3/gf/tools_modules-gfsh-os_command_line_execution.html](https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire/10-3/gf/tools_modules-gfsh-os_command_line_execution.html)
 
-- Using gfsh to Manage a Remote Cluster Over HTTP or HTTPS: [https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire/10-3/gf/configuring-cluster_config-gfsh_remote.html](https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire/10-3/gf/configuring-cluster_config-gfsh_remote.html)
+- Using `gfsh` to Manage a Remote Cluster Over HTTP or HTTPS: [https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire/10-3/gf/configuring-cluster_config-gfsh_remote.html](https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire/10-3/gf/configuring-cluster_config-gfsh_remote.html)
 
-- Creating and Running gfsh Command Scripts: [https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire/10-3/gf/tools_modules-gfsh-command_scripting.html](https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire/10-3/gf/tools_modules-gfsh-command_scripting.html)
+- Creating and Running `gfsh` Command Scripts: [https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire/10-3/gf/tools_modules-gfsh-command_scripting.html](https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire/10-3/gf/tools_modules-gfsh-command_scripting.html)
 
 ## <a id="networking-refs"></a> Networking, Firewall, and Connections
 

@@ -2,7 +2,7 @@
 
 Internally, Tanzu GemFire exposes its management and monitoring surface through Java MBeans, specifically MXBeans, that any JMX-compliant client can consume. On top of this foundation, GemFire provides several tools: the `gfsh` command-line interface, which is the primary administrative tool, Tanzu GemFire Management Console , which is a browser-based operations console, a Prometheus metrics endpoint on each member, a management REST API, and out-of-the-box integration for observability.
 
-## <a id="gfsh-tool"></a> gfsh Command-Line Tool
+## <a id="gfsh-tool"></a> `gfsh` Command-Line Tool
 
 The GemFire Shell (`gfsh`) is the recommended command-line interface for configuring, managing, and monitoring a cluster. `gfsh` lets you:
 
@@ -22,15 +22,15 @@ The GemFire Shell (`gfsh`) is the recommended command-line interface for configu
 
 You can run `gfsh` as an interactive shell, or you can invoke `gfsh` from the OS command line, and `gfsh` supports scripting for automation. `gfsh` can manage a remote cluster over HTTP or HTTPS, or connect to a JMX Manager member for JMX-based commands. With shared cluster configuration, `gfsh` maintains reusable settings that locators store and synchronize across the cluster, for example, `cluster.xml` and `cluster.properties`. More information:
 
-- [Running gfsh Commands on the OS Command Line](https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire/10-3/gf/tools_modules-gfsh-os_command_line_execution.html)
+- [Running `gfsh` Commands on the OS Command Line](https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire/10-3/gf/tools_modules-gfsh-os_command_line_execution.html)
 
-- [Using gfsh to Manage a Remote Cluster Over HTTP or HTTPS](https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire/10-3/gf/configuring-cluster_config-gfsh_remote.html)
+- [Using `gfsh` to Manage a Remote Cluster Over HTTP or HTTPS](https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire/10-3/gf/configuring-cluster_config-gfsh_remote.html)
 
-- [Creating and Running gfsh Command Scripts](https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire/10-3/gf/tools_modules-gfsh-command_scripting.html)
+- [Creating and Running `gfsh` Command Scripts](https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire/10-3/gf/tools_modules-gfsh-command_scripting.html)
 
 ## <a id="management-console"></a> Tanzu GemFire Management Console
 
-Tanzu GemFire Management Console is a browser-based console that streamlines day-to-day operations and provides visual insight across your GemFire estate. Tanzu GemFire Management Console is delivered as a standalone application, either a JAR file that requires JDK 11, 17, or 21, or an OCI container image, and Tanzu GemFire Management Console runs alongside your clusters rather than as part of them. Tanzu GemFire Management Console is not a gfsh command. Tanzu GemFire Management Console can manage an entire fleet of clusters, including multi-site (WAN) topologies, from a single interface.
+Tanzu GemFire Management Console is a browser-based console that streamlines day-to-day operations and provides visual insight across your GemFire estate. Tanzu GemFire Management Console is delivered as a standalone application, either a JAR file that requires JDK 11, 17, or 21, or an OCI container image, and Tanzu GemFire Management Console runs alongside your clusters rather than as part of them. Tanzu GemFire Management Console is not a `gfsh` command. Tanzu GemFire Management Console can manage an entire fleet of clusters, including multi-site (WAN) topologies, from a single interface.
 
 ### <a id="gmc-operations"></a> Operations and management (write) capabilities
 

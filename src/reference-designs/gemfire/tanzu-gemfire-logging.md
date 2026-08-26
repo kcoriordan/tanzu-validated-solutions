@@ -32,7 +32,7 @@ You can configure logging using:
 
 - The member's `gemfire.properties` file.
 
-- At startup, using gfsh, for example with the `--log-level` option.
+- At startup, using `gfsh`, for example with the `--log-level` option.
 
 - Dynamically, using the `alter runtime` command, for example `alter runtime --log-level=`.
 
@@ -53,7 +53,7 @@ The following are the default GemFire logging properties:
 | Property | Description |
 | ----- | ----- |
 | log-level | Sets the verbosity of log messages. Supported values are case-insensitive: `none`, `severe`, `error`, `warning`, `info`, `config`, `fine`, `finer`, `finest`, `all`. The default is `config`. For general troubleshooting, use `config` or higher. Use `fine` or lower only for deep debugging, because verbose levels can affect performance. |
-| log-file | Specifies the output log file name as a relative or absolute path. When you start a member with gfsh and don't set `log-file`, output defaults to `working-directory/<member-name>.log`. For example, servers use `server-name.log` and locators use `locator-name.log`. |
+| log-file | Specifies the output log file name as a relative or absolute path. When you start a member with `gfsh` and don't set `log-file`, output defaults to `working-directory/<member-name>.log`. For example, servers use `server-name.log` and locators use `locator-name.log`. |
 | log-file-size-limit | Maximum size, in MB, of a single log file. When the limit is exceeded, logs roll over to a new file. A value of `0` means no size limit, so GemFire uses a single, non-rolling log file. |
 | log-disk-space-limit | Total disk space, in MB, allocated for all rolled log files. When the limit is reached, GemFire deletes the oldest rolled files first. A value of `0` disables the limit. |
 
@@ -67,19 +67,19 @@ log-file-size-limit=0
 log-disk-space-limit=0
 ```
 
-### <a id="gfsh-logging"></a> gfsh Logging
+### <a id="gfsh-logging"></a> `gfsh` Logging
 
-gfsh is the administrative client, not a cluster member. gfsh runs as a separate process on a workstation, jump host, or automation runner. gfsh connects to the cluster through a locator and, for management and monitoring commands, a JMX Manager member. gfsh logging records the client side of a session. This record includes the commands that you issue, the connection and authentication activity to the locator, JMX Manager, or HTTP management endpoint, and the stack traces of any commands that fail. gfsh logging is distinct from, and complementary to, the member logs, which record only cluster-side behavior.
+`gfsh` is the administrative client, not a cluster member. `gfsh` runs as a separate process on a workstation, jump host, or automation runner. `gfsh` connects to the cluster through a locator and, for management and monitoring commands, a JMX Manager member. `gfsh` logging records the client side of a session. This record includes the commands that you issue, the connection and authentication activity to the locator, JMX Manager, or HTTP management endpoint, and the stack traces of any commands that fail. `gfsh` logging is distinct from, and complementary to, the member logs, which record only cluster-side behavior.
 
-gfsh session logging is deactivated by default, because the shell is interactive and typically short-lived. Enable gfsh session logging when you need to examine the client side of a session. Typical cases include diagnosing why gfsh cannot connect to or authenticate with a secured or TLS-enabled JMX Manager or HTTP manager, debugging gfsh scripts that run non-interactively in automation or CI/CD pipelines, and keeping a record of the administrative commands that you issue from a shell. For ad hoc troubleshooting within a running shell, the `debug on` command activates verbose shell output for the current session without setting a system property.
+`gfsh` session logging is deactivated by default, because the shell is interactive and typically short-lived. Enable `gfsh` session logging when you need to examine the client side of a session. Typical cases include diagnosing why `gfsh` cannot connect to or authenticate with a secured or TLS-enabled JMX Manager or HTTP manager, debugging `gfsh` scripts that run non-interactively in automation or CI/CD pipelines, and keeping a record of the administrative commands that you issue from a shell. For ad hoc troubleshooting within a running shell, the `debug on` command activates verbose shell output for the current session without setting a system property.
 
-To enable file logging, set the `gfsh.log-level` system property before starting gfsh, using one of `severe`, `warning`, `info`, `config`, `fine`, `finer`, or `finest`:
+To enable file logging, set the `gfsh.log-level` system property before starting `gfsh`, using one of `severe`, `warning`, `info`, `config`, `fine`, `finer`, or `finest`:
 
 ```shell
 export JAVA_ARGS=-Dgfsh.log-level=[severe|warning|info|config|fine|finer|finest]
 ```
 
-gfsh writes its log to the directory from which you launch gfsh, named in the format `gfsh-<unique>_<generation>.log`. For example, `gfsh-0_0.log`. Shells that you start concurrently in the same directory receive distinct file names. Because gfsh writes these files on the administrative host rather than on the GemFire nodes, collect them from the administrative host if you need to retain them.
+`gfsh` writes its log to the directory from which you launch `gfsh`, named in the format `gfsh-<unique>_<generation>.log`. For example, `gfsh-0_0.log`. Shells that you start concurrently in the same directory receive distinct file names. Because `gfsh` writes these files on the administrative host rather than on the GemFire nodes, collect them from the administrative host if you need to retain them.
 
 ### <a id="customizing-log4j2"></a> Customizing Log4j 2 for Centralized Logging
 
