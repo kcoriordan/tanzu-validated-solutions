@@ -31,15 +31,15 @@ The following overview illustrates the logical architecture of VMware Tanzu GemF
 
   - **Alternative 1:** Manual DNS Override
 
-    Standard enterprise DNS A-records for locator.domain.com map to Region 1 Locators during normal operations. During a declared disaster, network administrators update the DNS records to point to Region 2 Locators. Upon DNS TTL expiration, disconnected clients resolve the new IPs and fail over automatically.
+    Standard enterprise DNS A-records for `locator.domain.com` map to Region 1 Locators during normal operations. During a declared disaster, network administrators update the DNS records to point to Region 2 Locators. Upon DNS TTL expiration, disconnected clients resolve the new IPs and fail over automatically.
 
   - **Alternative 2:** Application Configuration Update
 
-    If DNS updates are restricted, administrators update client application properties, for example gemfire.properties or Spring Boot configuration, with the Region 2 Locator IPs, then restart the application.
+    If DNS updates are restricted, administrators update client application properties, for example `gemfire.properties` or Spring Boot configuration, with the Region 2 Locator IPs, then restart the application.
 
 ## <a id="cross-site-locators-warning"></a> Critical Architectural Constraint: Avoid Cross-Site Locator Lists
 
-Never configure clients with a combined list of locators spanning both regions simultaneously (for example, locators=locator-r01az01-IP[10334], locator-r02az01-IP[10334]). Because GemFire native clients randomize locator addresses for initial load balancing, a dual-region configuration risks forcing healthy clients in Region 1 to connect to Region 2 servers during normal operations. This can cause severe cross-WAN latency and potential data divergence.
+Never configure clients with a combined list of locators spanning both regions simultaneously (for example, `locators=locator-r01az01-IP[10334], locator-r02az01-IP[10334]`). Because GemFire native clients randomize locator addresses for initial load balancing, a dual-region configuration risks forcing healthy clients in Region 1 to connect to Region 2 servers during normal operations. This can cause severe cross-WAN latency and potential data divergence.
 
 ## <a id="key-components"></a> Key Components of Tanzu GemFire
 
@@ -91,19 +91,19 @@ Tanzu GemFire Management Console is a standalone web application, shipped as a J
 
 ### <a id="unified-metrics"></a> Unified Metrics Exposure (GemFire 10.3 Architecture)
 
-Unlike older versions that required dedicated metrics ports, GemFire 10.3 consolidates observability onto the member's standard HTTP service port. Each member in the cluster natively exposes its statistics (prefixed with `gemfire_`, such as `gemfire_gets`) at the /metrics endpoint.
+Unlike older versions that required dedicated metrics ports, GemFire 10.3 consolidates observability onto the member's standard HTTP service port. Each member in the cluster natively exposes its statistics (prefixed with `gemfire_`, such as `gemfire_gets`) at the `/metrics` endpoint.
 
-- **Locators:** The enable-management-rest-service=true property enables the endpoint by default.
+- **Locators:** The `enable-management-rest-service=true` property enables the endpoint by default.
 
-- **Servers:** Appending the --start-rest-api flag during startup enables the endpoint.
+- **Servers:** Appending the `--start-rest-api` flag during startup enables the endpoint.
 
-- **Port Isolation:** To adhere to security best practices, administrators can restrict the HTTP service port to explicitly serve only metrics, disabling the Developer REST APIs, by configuring http-services=metrics. Administrators can also tune the emission level per member (Default, All, or None).
+- **Port Isolation:** To adhere to security best practices, administrators can restrict the HTTP service port to explicitly serve only metrics, disabling the Developer REST APIs, by configuring `http-services=metrics`. Administrators can also tune the emission level per member (`Default`, `All`, or `None`).
 
 ### <a id="prometheus-grafana"></a> Prometheus and Grafana Integration
 
 Tanzu GemFire Management Console provides deep observability through a native Prometheus integration.
 
-- **Data Collection (Prometheus):** A Prometheus server, either embedded within Tanzu GemFire Management Console or managed externally by the organization, acts as the time-series database. This server directly scrapes the /metrics endpoints on the HTTP service ports of the cluster members.
+- **Data Collection (Prometheus):** A Prometheus server, either embedded within Tanzu GemFire Management Console or managed externally by the organization, acts as the time-series database. This server directly scrapes the `/metrics` endpoints on the HTTP service ports of the cluster members.
 
 - **Tanzu GemFire Management Console Visualization:** Tanzu GemFire Management Console actively queries Prometheus using PromQL to populate its Monitoring tab. Tanzu GemFire Management Console organizes these insights into three core areas: Data (throughput, latencies, cache hit ratios), Cluster (memory, CPU, disk utilization, IO waits), and WAN Gateway (receiver throughput and sender queues). The UI provides a viewing window capped at a 7-day history.
 

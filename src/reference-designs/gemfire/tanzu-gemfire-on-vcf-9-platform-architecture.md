@@ -86,7 +86,7 @@ In addition to failure resilience, the architecture supports scalability, allowi
   Tanzu GemFire supports data distribution across geographically dispersed sites. Using gateway sender configurations, the system ensures reliable communication between data centers, enabling scalability without sacrificing performance or data consistency.
 
 - **Continuous Querying**  
-  Tanzu GemFire continuously runs complex queries, enabling real-time data updates for applications. Object Query Language (OQL) achieves this by simplifying queries for dynamic, real-time data processing.
+  Tanzu GemFire continuously runs complex queries, enabling real-time data updates for applications. `Object Query Language (OQL)` achieves this by simplifying queries for dynamic, real-time data processing.
 
 - **Heterogeneous Data Sharing**  
   Applications written in different languages (C#, C++, Java) can share business objects seamlessly without needing complex transformation layers. Changes in one application automatically trigger updates in others, facilitating smooth integration between different platforms.

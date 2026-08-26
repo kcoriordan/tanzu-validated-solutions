@@ -60,7 +60,7 @@ The following are the default GemFire logging properties:
 Example default configuration:
 
 ```
-# Default gemfire.properties log file settings
+# Default `gemfire.properties` log file settings
 log-level=config
 log-file=
 log-file-size-limit=0
@@ -171,9 +171,9 @@ if ($fromhost-ip == 'Locator-IP' or $fromhost-ip == 'Server-IP') then {
 }
 ```
 
-- Update GemFire's log4j2.xml
+- Update GemFire's `log4j2.xml`
 
-  Modify each member's Log4j 2 configuration file, log4j2.xml, to include a Syslog Appender that forwards logs to the centralized server. Sample configuration:
+  Modify each member's Log4j 2 configuration file, `log4j2.xml`, to include a Syslog Appender that forwards logs to the centralized server. Sample configuration:
 
 ```xml
 <Appenders>
