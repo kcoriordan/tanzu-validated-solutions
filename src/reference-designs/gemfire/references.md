@@ -4,7 +4,7 @@ About Tanzu GemFire: [Tanzu GemFire Overview](https://techdocs.broadcom.com/us/e
 
 Installing GemFire on Linux (TAR File):  [Install GemFire Using a Compressed TAR](https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire/10-3/gf/getting_started-installation-install_standalone.html)
 
-**Tanzu GemFire Management and Monitoring**
+## <a id="management-monitoring-refs"></a> Tanzu GemFire Management and Monitoring
 
 - Tanzu GemFire Management Console (product documentation): [https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire/10-3/gf/managing-management-gemfire-management-console.html](https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire/10-3/gf/managing-management-gemfire-management-console.html)
 
@@ -16,7 +16,7 @@ Installing GemFire on Linux (TAR File):  [Install GemFire Using a Compressed TAR
 
 - Tanzu GemFire Management Console 1.4, Monitoring: [https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire-management-console/1-4/gf-mc/monitoring.html](https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire-management-console/1-4/gf-mc/monitoring.html)
 
-**Logging**
+## <a id="logging-refs"></a> Logging
 
 - Configuring Log4j 2 for Tanzu GemFire: [https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire/10-3/gf/managing-logging-configuring_log4j2.html](https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire/10-3/gf/managing-logging-configuring_log4j2.html)
 
@@ -26,7 +26,7 @@ Installing GemFire on Linux (TAR File):  [Install GemFire Using a Compressed TAR
 
 - Understanding Log Messages and Their Categories (main, child, and metadata logs, and renaming logs on rollover and restart): [https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire/10-3/gf/managing-logging-logging_categories.html](https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire/10-3/gf/managing-logging-logging_categories.html)
 
-**gfsh (Command-Line Interface)**
+## <a id="gfsh-refs"></a> gfsh (Command-Line Interface)
 
 - Configuring the gfsh Environment (session logging, gfsh.log-level): [https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire/10-3/gf/tools_modules-gfsh-configuring_gfsh.html](https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire/10-3/gf/tools_modules-gfsh-configuring_gfsh.html)
 
@@ -38,7 +38,7 @@ Installing GemFire on Linux (TAR File):  [Install GemFire Using a Compressed TAR
 
 - Creating and Running gfsh Command Scripts: [https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire/10-3/gf/tools_modules-gfsh-command_scripting.html](https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire/10-3/gf/tools_modules-gfsh-command_scripting.html)
 
-**Networking, Firewall, and Connections**
+## <a id="networking-refs"></a> Networking, Firewall, and Connections
 
 - Firewalls and Ports (canonical default ports): [https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire/10-3/gf/configuring-running-firewall-firewalls_ports.html](https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire/10-3/gf/configuring-running-firewall-firewalls_ports.html)
 
@@ -50,7 +50,7 @@ Installing GemFire on Linux (TAR File):  [Install GemFire Using a Compressed TAR
 
 - Setting Socket Buffer Sizes: [https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire/10-3/gf/managing-monitor_tune-socket_communication_setting_socket_buffer_sizes.html](https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire/10-3/gf/managing-monitor_tune-socket_communication_setting_socket_buffer_sizes.html)
 
-**Components, High Availability, and WAN**
+## <a id="components-ha-refs"></a> Components, High Availability, and WAN
 
 - High Availability for Partitioned Regions (read and write behavior, secondary promotion): [https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire/10-3/gf/developing-partitioned_regions-how_pr_ha_works.html](https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire/10-3/gf/developing-partitioned_regions-how_pr_ha_works.html)
 
@@ -62,7 +62,7 @@ Installing GemFire on Linux (TAR File):  [Install GemFire Using a Compressed TAR
 
 - Multi-site (WAN) Configuration and Gateway Senders and Receivers: [https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire/10-3/gf/topologies_and_comm-multi_site_configuration-chapter_overview.html](https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire/10-3/gf/topologies_and_comm-multi_site_configuration-chapter_overview.html)
 
-**Sizing, OS Configuration, Performance Tuning, and vSphere**
+## <a id="sizing-refs"></a> Sizing, OS Configuration, Performance Tuning, and vSphere
 
 - Performance Tuning and Configuration (chapter overview, including Improving Performance on vSphere, NUMA/CPU/BIOS, NIC, storage, vMotion/DRS/snapshots, and vSphere HA guidance): [https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire/10-3/gf/managing-monitor_tune-chapter_overview.html](https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire/10-3/gf/managing-monitor_tune-chapter_overview.html)
 
@@ -74,7 +74,7 @@ Installing GemFire on Linux (TAR File):  [Install GemFire Using a Compressed TAR
 
 - Garbage Collection guidance (ZGC and Generational ZGC recommendation, G1GC, and heap LRU eviction): within the Managing GemFire and Performance Tuning sections of the 10.3 documentation set.
 
-**Other References**
+## <a id="other-refs"></a> Other References
 
 - Broadcom KB 448413, Aria Operations cluster stuck in "Waiting for Analytics" (below-5-ms latency requirement and GemFire communication-deadlock failure mode): [https://knowledge.broadcom.com/external/article/448413/aria-operations-cluster-stuck-in-waiting.html](https://knowledge.broadcom.com/external/article/448413/aria-operations-cluster-stuck-in-waiting.html)
 

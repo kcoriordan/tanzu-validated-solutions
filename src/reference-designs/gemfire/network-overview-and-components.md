@@ -55,7 +55,8 @@ Each VPC encapsulates logical segments, routing, gateway configurations, and ass
 
 	For more details on VPCs in NSX-T, refer to [official documentation](https://techdocs.broadcom.com/us/en/vmware-cis/vcf/vcf-9-0-and-later/9-0/advanced-network-management/administration-guide/virtual-private-cloud-in-nsx/virtual-private-clouds-overview.html).
 
-**Types of Subnet on VPCs**  
+### <a id="subnet-types"></a> Types of Subnet on VPCs
+
 NSX-T VPCs support three main types of subnets, also called VPC subnets.
 
 | Subnet Type | Scope and Description |

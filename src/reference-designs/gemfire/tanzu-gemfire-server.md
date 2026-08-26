@@ -10,7 +10,7 @@ A Tanzu GemFire Server is a process that hosts data regions, performs read and w
 
 - Works with locators to provide high availability and scalability.
 
-**Recommendations for deploying Servers**
+## <a id="server-recommendations"></a> Recommendations for deploying Servers
 
 - **Deploy at least three servers per cluster.** Three or more servers provide data redundancy and fault tolerance. This configuration also gives the network-partition-detection weighting enough members to avoid split-brain issues.
 
@@ -33,7 +33,7 @@ A Partitioned Region divides its data across multiple servers. Each server holds
 ![image6](./images/image6.png)  
 The partitioned structure is invisible to the application. The region appears as a single logical dataset, fully accessible from any member, even if that member stores only part of the data locally. Memory usage is configurable per server per region. A cluster can host many partitioned regions, a server can host many regions at once, and partitioned and replicated regions can coexist in the same cluster.
 
-**Summary:**
+### <a id="partitioned-summary"></a> Summary
 
 - Data is partitioned across multiple servers. Throughput for get and put operations scales as members are added.
 
@@ -41,11 +41,12 @@ The partitioned structure is invisible to the application. The region appears as
 
 - Well suited to large datasets and write-heavy workloads.
 
-#### **High Availability for Partitioned Regions** 
+#### High Availability for Partitioned Regions 
 
 In a highly available partitioned region, each member holds a mix of primary and secondary, or redundant, copies. This mix lets the region keep operating without interruption if a member fails. If the member hosting a primary copy is lost, GemFire promotes a secondary copy to primary. This promotion temporarily reduces redundancy, but does not cause data loss. The system then restores redundancy by assigning another member as secondary and copying the data to it. Recovery can happen immediately or after a configurable wait, and GemFire also attempts recovery during rebalancing. Redundancy does not make data loss impossible: if enough members fail within a short enough interval, cached data can still be lost.
 
-**Read and Write Behavior in HA Regions**  
+### <a id="ha-read-write"></a> Read and Write Behavior in HA Regions
+
 GemFire handles reads and writes differently in partitioned regions with redundancy:
 
 - **Read operations** go to any member holding a copy, with the local cache favored. If a member has the entry locally, the member reads the entry directly. Otherwise, the member fetches the entry from another member that holds a copy, chosen at random. Favoring local copies lets read-intensive systems scale across members. In the figure, M1 reads three keys: key A from its own local copy, and keys C and D from other copy-holders selected at random.

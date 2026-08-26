@@ -37,14 +37,15 @@ The following overview illustrates the logical architecture of VMware Tanzu GemF
 
     If DNS updates are restricted, administrators update client application properties, for example gemfire.properties or Spring Boot configuration, with the Region 2 Locator IPs, then restart the application.
 
-**Critical Architectural Constraint: Avoid Cross-Site Locator Lists:**
+## <a id="cross-site-locators-warning"></a> Critical Architectural Constraint: Avoid Cross-Site Locator Lists
+
 Never configure clients with a combined list of locators spanning both regions simultaneously (for example, locators=locator-r01az01-IP[10334], locatos-r02az01-IP[10334]). Because GemFire native clients randomize locator addresses for initial load balancing, a dual-region configuration risks forcing healthy clients in Region 1 to connect to Region 2 servers during normal operations. This can cause severe cross-WAN latency and potential data divergence.
 
 ## <a id="key-components"></a> Key Components of Tanzu GemFire
 
 This section outlines the core components of Tanzu GemFire. Together, these components provide a distributed, in-memory data management platform optimized for high performance, dynamic scalability, and fault tolerance.
 
-**Tanzu GemFire Locators:**
+### <a id="component-locators"></a> Tanzu GemFire Locators
 
 Locators act as the directory and primary cluster coordinators for the GemFire distributed system. Locators help new servers or clients discover the cluster and maintain consistent membership information. Locators do not store application data. Instead, they provide the following essential services:
 
@@ -56,7 +57,7 @@ Locators act as the directory and primary cluster coordinators for the GemFire d
 
 Locators form the backbone of cluster formation and communication.
 
-**Tanzu GemFire Servers:**
+### <a id="component-servers"></a> Tanzu GemFire Servers
 
 Tanzu GemFire Servers, often referred to as Data Nodes or Cache Servers, are the JVM processes responsible for storing and managing the actual application data.
 
@@ -66,7 +67,7 @@ Tanzu GemFire Servers, often referred to as Data Nodes or Cache Servers, are the
 
 - Servers scale horizontally. Adding more servers to a cluster dynamically increases both data capacity and overall processing performance.
 
-**Tanzu GemFire Regions**
+### <a id="component-regions"></a> Tanzu GemFire Regions
 
 A Region is the primary data container in GemFire and is conceptually similar to a highly scalable, distributed Map. Regions define exactly how data is distributed, replicated, stored, and recovered across the cluster.
 
@@ -76,7 +77,7 @@ A Region is the primary data container in GemFire and is conceptually similar to
 
 - Storage: You can configure a region as purely in-memory, or persistent on disk for crash recovery.
 
-**Gateway Sender and Gateway Receiver**
+### <a id="component-gateway"></a> Gateway Sender and Gateway Receiver
 
 These components enable asynchronous, multi-site WAN replication, ensuring cross-site consistency for Disaster Recovery, Active/Active deployments, or geographically distributed systems.
 
@@ -84,11 +85,11 @@ These components enable asynchronous, multi-site WAN replication, ensuring cross
 
 - Gateway Receivers: Running on the remote destination cluster, Gateway Receivers accept and apply those incoming events to the local regions.
 
-**Tanzu GemFire Management Console**
+### <a id="component-console"></a> Tanzu GemFire Management Console
 
 The Tanzu GemFire Management Console is a standalone web application, shipped as a JAR or OCI image, that serves as the central hub for cluster administration, fleet management, and real-time monitoring. Beyond visualization, the Management Console allows administrators to execute write operations, for example creating regions, deploying JARs, or managing gateways, and perform centralized log searches.
 
-**Unified Metrics Exposure (GemFire 10.3 Architecture)**
+### <a id="unified-metrics"></a> Unified Metrics Exposure (GemFire 10.3 Architecture)
 
 Unlike older versions that required dedicated metrics ports, GemFire 10.3 consolidates observability onto the member's standard HTTP service port. Each member in the cluster natively exposes its statistics (prefixed with `gemfire_`, such as `gemfire_gets`) at the /metrics endpoint.
 
@@ -98,7 +99,7 @@ Unlike older versions that required dedicated metrics ports, GemFire 10.3 consol
 
 - **Port Isolation:** To adhere to security best practices, administrators can restrict the HTTP service port to explicitly serve only metrics, disabling the Developer REST APIs, by configuring http-services=metrics. Administrators can also tune the emission level per member (Default, All, or None).
 
-**Prometheus and Grafana Integration**
+### <a id="prometheus-grafana"></a> Prometheus and Grafana Integration
 
 The Management Console provides deep observability through a native Prometheus integration.
 

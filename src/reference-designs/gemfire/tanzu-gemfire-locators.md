@@ -7,12 +7,12 @@ A Locator performs two core functions. A concurrent service running inside the s
 
 - **Server Locator.** Handles client connection routing. The Server Locator directs clients to the most suitable cache server, typically the one with the least load. This routing enables client-side load balancing and high availability for client-to-server connections.
 
-**Locators and network-partition ("split-brain") protection**
+## <a id="split-brain-protection"></a> Locators and network-partition ("split-brain") protection
 
 Running two or more locators removes the Locator tier as a single point of failure for discovery and coordination. This locator redundancy does not, by itself, prevent a split-brain. GemFire's network-partition detection, not locator redundancy, provides split-brain protection. The `enable-network-partition-detection` property enables this detection by default. Clusters that use partitioned or persistent regions require this detection to be enabled. Under this mechanism, the oldest member acts as the membership coordinator, preferably a Locator. Each member contributes a weight to quorum calculations: a Locator weighs 3, a cache server weighs 10, and the lead server weighs 15. If a single membership-view change causes a loss of 51 percent or more of the total member weight, GemFire declares a network partition. The losing side then shuts itself down to preserve consistency. Deploying multiple locators and at least three cache servers gives this weighting mechanism enough members to make a correct, deterministic decision.  
 For more details refer to the [official documentation](https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire/10-1/gf/managing-network_partitioning-membership_coordinators_lead_members_and_weighting.html).
 
-**Recommendations for deploying Locators**
+## <a id="locator-recommendations"></a> Recommendations for deploying Locators
 
 - **Minimum of two locators, one per AZ.** This minimum locator count removes the single point of failure for membership and client discovery.
 

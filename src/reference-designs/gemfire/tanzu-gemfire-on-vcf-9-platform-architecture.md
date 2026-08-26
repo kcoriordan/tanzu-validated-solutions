@@ -6,7 +6,7 @@ The following design illustrates the Platform Architecture of VMware Tanzu GemFi
 
 In addition to failure resilience, the architecture supports scalability, allowing GemFire clusters to expand horizontally across AZs and regions. Distributed GemFireServer nodes and redundant Locator instances enhance redundancy and ensure consistent performance under variable load. NSX-T provides consistent networking, and VCF offers standardized lifecycle management. Together, these components deliver a robust foundation for deploying, scaling, and operating high-performance GemFire environments at enterprise scale.
 
-**VCF Platform Architecture Overview**
+## <a id="platform-overview"></a> VCF Platform Architecture Overview
 
 1. Multi-Region, Multi-AZ Design for Resiliency
 
@@ -36,7 +36,7 @@ In addition to failure resilience, the architecture supports scalability, allowi
 
    Integrating NSX Advanced Load Balancer (ALB) to act as a Global Server Load Balancer (GSLB) provides automated, multi-region failover for Tanzu GemFire. However, the GSLB operates strictly at the DNS layer, not the data layer.
 
-**GemFire Deployment Model**
+## <a id="deployment-model"></a> GemFire Deployment Model
 
 1. Primary GemFireCluster Across Multiple AZs (Region 1)
 

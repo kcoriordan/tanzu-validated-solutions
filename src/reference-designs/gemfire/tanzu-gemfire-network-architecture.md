@@ -47,7 +47,8 @@ The network diagram shows that GemFire clusters can be placed on three distinct 
 
 - Project 2 shows a GemFire cluster hosted on Public segments.
 
-**Design Recommendation:**   
+### <a id="design-recommendation"></a> Design Recommendation
+
 For the evaluated VCF-based architecture, placing GemFire clusters on Public segments is the recommended approach, because their broader reachability suits multi-Project and multi-Region designs. The diagram deliberately shows all three models to illustrate the full range of supported options and where each applies.
 
 This section explains how GemFire operates across the three supported network topologies:
@@ -116,7 +117,7 @@ WAN Replication Characteristics:
 
 GemFire clusters can be hosted on any of the overlay networks above. Regardless of the chosen network, follow these recommendations.
 
-**Segment placement**
+### <a id="segment-placement"></a> Segment placement
 
 - Place all members, Locators and Servers, of a given cluster on a single NSX segment per cluster, rather than spreading one cluster across multiple routed segments. This design keeps intra-cluster traffic at L2 within the overlay.
 
@@ -138,7 +139,7 @@ GemFire clusters can be hosted on any of the overlay networks above. Regardless 
 
 - Both the discovery path (client to Locator) and the data path (client to every Server) must be open through the firewall. A client that can reach Locators but not Servers, or Servers but not Locators, will fail to connect.
 
-**Do not NAT GemFire member traffic**
+### <a id="no-nat"></a> Do not NAT GemFire member traffic
 
 - Never NAT core GemFire member-to-member, client-to-server, or gateway sender or receiver traffic. Locators and Servers advertise and rely on real VM IPs. SNAT and DNAT break membership, server discovery, single-hop routing, and WAN replication.
 

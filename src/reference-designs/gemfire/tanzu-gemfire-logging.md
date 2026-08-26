@@ -36,7 +36,7 @@ You can configure logging using:
 
 - Dynamically, using the `alter runtime` command, for example `alter runtime --log-level=`.
 
-**Recommended setup:**
+### <a id="recommended-setup"></a> Recommended setup
 
 - Run a service for time synchronization, such as NTP, on all GemFire hosts to ensure consistent timestamps across members.
 

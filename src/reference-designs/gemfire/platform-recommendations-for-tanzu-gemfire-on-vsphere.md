@@ -31,7 +31,7 @@ Efficient CPU allocation is critical for stable and predictable Tanzu GemFire pe
 
 - Follow the NUMA best practices described in the following section.
 
-**Virtual Machine CPU Reservations**
+### <a id="vm-cpu-reservations"></a> Virtual Machine CPU Reservations
 
 To minimize jitter:
 
@@ -39,7 +39,7 @@ To minimize jitter:
 
 - Avoid CPU overcommitment on hosts that run GemFire VMs.
 
-**vCPU Sizing**
+### <a id="vcpu-sizing"></a> vCPU Sizing
 
 - Allocate a minimum of 4 vCPUs per GemFire VM.
 
@@ -47,17 +47,17 @@ To minimize jitter:
 
 - You may use larger VMs, from 8 to 16 vCPUs, for higher-throughput clusters, as long as the VM fits entirely inside one NUMA node.
 
-  See [NUMA and vNUMA Considerations for GemFireVMs](#numa-and-vnuma-considerations-for-gemfirevms) in this document for more information.
+  See [NUMA and vNUMA Considerations for GemFireVMs](#numa-vnuma) in this document for more information.
 
 - Avoid unnecessary oversizing to reduce CPU Ready time and scheduling delays.
 
-**CPU Steal Time Monitoring**
+### <a id="cpu-steal-time"></a> CPU Steal Time Monitoring
 
 To monitor CPU scheduling delays caused by hypervisor contention, enable steal-time tracking in the GemFire VM configuration.
 
 Steal-time tracking helps detect situations where the guest OS is ready to run but the physical CPU is unavailable because of oversubscription or resource contention from other VMs on the host.
 
-**Configuration**:
+### <a id="steal-time-config"></a> Configuration
 
 ```
 stealclock.enable = "TRUE"
@@ -77,7 +77,7 @@ Efficient memory allocation is critical for stable and predictable Tanzu GemFire
 
 - Follow the NUMA best practices described in the sections below.
 
-**Virtual Machine Memory Reservation**
+### <a id="vm-memory-reservation"></a> Virtual Machine Memory Reservation
 
 Full memory reservation is required for GemFire components:
 
@@ -87,13 +87,14 @@ Full memory reservation is required for GemFire components:
 
 - Memory reservation ensures stable latency and consistent GC performance.
 
-**Avoid Memory Overcommitment**
+### <a id="avoid-overcommitment"></a> Avoid Memory Overcommitment
 
 - **Do not** overcommit memory on ESXi hosts running GemFire clusters.
 
 - Overcommitment causes unpredictable performance and GC pauses.
 
-**Use of Large Pages**   
+### <a id="large-pages"></a> Use of Large Pages
+
 Enable Java Large Pages (Huge Pages) inside the guest OS:
 
 ```
@@ -102,7 +103,7 @@ Enable Java Large Pages (Huge Pages) inside the guest OS:
 
 Large pages reduce TLB misses and improve garbage-collection efficiency for large heaps. Large pages require a supporting operating-system limit. Raise the locked-memory limit, shown by `ulimit -l` as "max locked memory", to at least the total heap memory that the member locks. The default is typically 32 KB or 64 KB, which is far too low. Unless you raise this limit, large pages will not engage.
 
-**Garbage Collector Selection and Tuning {#garbage-collector-selection-and-tuning}**
+### <a id="gc-selection"></a> Garbage Collector Selection and Tuning
 
 The choice of garbage collector directly affects pause times. A long pause can make a data node unresponsive long enough that the cluster suspects the node and expels it, a process governed by `member-timeout`. Proper heap sizing together with the recommended collector is the primary defense against pause-induced membership loss.
 
@@ -132,7 +133,7 @@ Apply the following on the GemFire VMs:
 
 - Disable unnecessary guest OS background services to reduce jitter.
 
-**Optional (Advanced Operations Only)**
+### <a id="optional-advanced-ops"></a> Optional (Advanced Operations Only)
 
 - You may use CPU Affinity or NUMA Node Pinning to eliminate cross-node scheduling, but apply this only when strictly required and tested.
 
@@ -150,11 +151,11 @@ Supported Java versions for Tanzu GemFire 10.3. JDK 17 is the minimum and baseli
 
 **Note:** Tanzu GemFire runs on JDK 21 and JDK 25 but does not support virtual threads on those versions.
 
-**systemd Prerequisite**
+### <a id="systemd-prerequisite"></a> systemd Prerequisite
 
 Configure systemd on Linux. GemFire requires the udev device manager, which is part of systemd, and which maintains the device nodes under /dev. This configuration is a baseline requirement. It is also the mechanism that GemFire uses for automatic member restart, as described under vSphere High Availability, Automatic Restart, and systemd.
 
-**Guest OS Level Resource Limits**
+### <a id="os-resource-limits"></a> Guest OS Level Resource Limits
 
 To support high concurrency and I/O workloads, configure appropriate user and process limits on Unix/Linux hosts in `/etc/security/limits.conf`: 
 
@@ -189,7 +190,7 @@ This section describes network adapter configuration, TCP tuning, NIC interrupt 
 
 - Ensure that the TCP/IP stack is fully enabled and configured for throughput and low latency.
 
-**Physical NIC Recommendations (ESXi Host Level)**
+### <a id="physical-nic"></a> Physical NIC Recommendations (ESXi Host Level)
 
 For latency-sensitive GemFire workloads, consider tuning physical NIC interrupt settings. Disabling interrupt coalescing, optionally, for ultra-low latency, reduces receive interrupt delay and can improve round-trip latency:
 
@@ -201,7 +202,7 @@ Replace vmnicX with your NIC name, which you can verify using `esxcli network ni
 
 **Note:** This type of tuning benefits Tanzu GemFire workloads, but it can negatively impact other non-GemFire workloads that are memory-throughput-bound rather than latency-sensitive. This tuning can also defeat the benefits of Large Receive Offload (LRO), because some physical NICs, such as Intel 10GbE NICs, automatically deactivate LRO when you deactivate interrupt coalescing. For more information, see [Understanding TCP Segmentation Offload (TSO) and Large Receive Offload (LRO) in the vSphere environment](https://knowledge.broadcom.com/external/article?articleNumber=318877).
 
-**Virtual NIC Configuration (VM Level)**
+### <a id="virtual-nic"></a> Virtual NIC Configuration (VM Level)
 
 Use VMXNET3 for all GemFire VMs.
 
@@ -209,13 +210,13 @@ Use VMXNET3 for all GemFire VMs.
 
 - The VMXNET3 adapter is the recommended adapter for all GemFire Cache Servers and Locators.
 
-**Disable Virtual Interrupt Coalescing (For Ultra-Low Latency)**
+### <a id="disable-interrupt-coalescing"></a> Disable Virtual Interrupt Coalescing (For Ultra-Low Latency)
 
 - You can disable virtual interrupt coalescing through the VM's `.vmx` configuration or through the vSphere API.
 
 - VMware recommends disabling virtual interrupt coalescing only for extremely latency-sensitive deployments where you must minimize jitter.
 
-**TCP SYN Cookie Configuration (Guest OS)**
+### <a id="tcp-syn-cookie"></a> TCP SYN Cookie Configuration (Guest OS)
 
 Many Linux distributions enable SYN cookies by default. SYN cookies are not compatible with stable, busy GemFire clusters. Normal GemFire traffic incorrectly triggers the SYN cookie protection, which severely limits bandwidth and new-connection rates. This problem is especially disruptive during:
 
@@ -227,7 +228,7 @@ Many Linux distributions enable SYN cookies by default. SYN cookies are not comp
 
 - WAN gateway connections
 
-**Disable SYN cookies (Recommended for GemFire Clusters)**
+### <a id="disable-syn-cookies"></a> Disable SYN cookies (Recommended for GemFire Clusters)
 
 ```
 sudo vi /etc/sysctl.conf
@@ -237,7 +238,7 @@ sudo sysctl -p
 
 Security note: to maintain protection against denial-of-service attacks, deploy GemFire clusters behind firewalls, load balancers, or network intrusion prevention systems (NIPS) instead of relying on SYN cookies.
 
-**High throughput and latency configurations (Guest OS)**
+### <a id="throughput-latency-config"></a> High throughput and latency configurations (Guest OS)
 
 GemFire systems often handle extremely high transaction volumes and move large amounts of traffic through the network. Maximizing network throughput is therefore a primary design goal. The following options assume TCP over IPv4:
 
@@ -273,7 +274,7 @@ sudo vi /etc/sysctl.conf
 sudo sysctl -p
 ```
 
-**Time Synchronization Requirements**
+### <a id="time-sync-requirements"></a> Time Synchronization Requirements
 
 Accurate and consistent time across all GemFire members is mandatory. Use NTP or an equivalent time service on all GemFire VMs to ensure:
 
@@ -285,7 +286,7 @@ Accurate and consistent time across all GemFire members is mandatory. Use NTP or
 
 - Proper functioning of distributed algorithms
 
-**Recommended Practices**
+### <a id="vsphere-recommended-practices"></a> Recommended Practices
 
 - Enable NTP at both the ESXi host and VM operating system levels.
 
@@ -293,7 +294,7 @@ Accurate and consistent time across all GemFire members is mandatory. Use NTP or
 
 - Avoid mixing different time sources, for example ESXi-based time sync combined with guest NTP.
 
-**Name Resolution & Host Configuration**
+### <a id="name-resolution"></a> Name Resolution & Host Configuration
 
 To avoid locator or management endpoint failures:
 
@@ -319,7 +320,7 @@ Sizing VMs within NUMA boundaries ensures:
 
 vSphere uses NUMA-aware scheduling to ensure that virtual machines receive CPU and memory resources from the same physical NUMA node whenever possible. The following sections describe vSphere behavior under two common sizing scenarios.
 
-**When a VM has fewer vCPUs and less memory than a single NUMA node provides**
+### <a id="numa-fits-node"></a> When a VM has fewer vCPUs and less memory than a single NUMA node provides
 
 If the VM's CPU and memory footprint fits entirely inside one physical NUMA node, vSphere keeps the VM bound to that node. This configuration is the ideal configuration for GemFire. Key behaviors:
 
@@ -335,7 +336,7 @@ Results:
 
 This scenario provides the best and most predictable performance. For GemFire locators and servers sized within this boundary, for example 4 to 16 vCPUs and 32 to 128 GB RAM depending on the host, cross-node memory access never causes latency spikes.
 
-**When a VM's vCPU count or memory requirement exceeds a single NUMA node**
+### <a id="numa-exceeds-node"></a> When a VM's vCPU count or memory requirement exceeds a single NUMA node
 
 If a VM's CPU or memory usage cannot fit within a single physical NUMA node, ESXi must span the VM across multiple NUMA nodes, and vSphere automatically exposes a virtual NUMA (vNUMA) topology to the guest OS. Two independent triggers can cause NUMA spanning:
 
@@ -397,7 +398,7 @@ vSphere features such as vMotion, DRS and snapshots can introduce instability or
 
 This section covers the official recommendation for using vSphere HA with GemFire, along with the trade-offs if you choose to enable it.
 
-### <a id="ha-recommendation"></a> **Official Recommendation**
+### <a id="ha-recommendation"></a> Official Recommendation
 
 The Tanzu GemFire 10.3 performance guidance is explicit: deactivate vSphere High Availability (HA) on GemFire virtual machines. If the GemFire cluster runs on a dedicated cluster, deactivate HA across that cluster. If the cluster runs on a shared cluster, exclude the GemFire VMs from vSphere HA. In addition, define VM-to-VM anti-affinity rules so that the cluster never places members holding redundant copies of the same data on the same ESXi host.
 
@@ -413,7 +414,7 @@ Enabling vSphere HA for GemFire VMs is a deliberate trade-off rather than the de
 
 - Keep the VM-to-VM anti-affinity rules, so that a single host loss can never take both the primary and its redundant copy at once.
 
-#### **Restarting GemFire Services After a Reboot (systemd)**  
+#### Restarting GemFire Services After a Reboot (systemd)
 
 Because systemd is already a GemFire prerequisite, running each member as a systemd service is the natural mechanism for restarting GemFire automatically after any VM reboot, whether vSphere HA or a planned maintenance action triggers that reboot. Adopt this practice even when you deactivate HA, so that a planned or accidental VM reboot brings the member back without manual intervention. The following recommendations describe what to do rather than how:
 
@@ -427,7 +428,7 @@ Because systemd is already a GemFire prerequisite, running each member as a syst
 
 - Keep the member's working directory and pid file stable across restarts, so that log files roll cleanly, with older logs renamed on restart, rather than colliding, and so that status and stop operations continue to work.
 
-#### **Coordinating GemFire Recovery Timing With the HA Restart Window**  
+#### Coordinating GemFire Recovery Timing With the HA Restart Window
 
 The central design point is making the surviving cluster wait long enough for an HA-restarted member to return before the cluster rebuilds redundancy, so that the cluster does not perform a full recovery and then a second rebalance when the member rejoins. Three GemFire settings govern this sequence.
 
@@ -441,7 +442,7 @@ In combination, `member-timeout` decides how fast the cluster notices a loss, `r
 
 One caution is specific to HA VM Monitoring. Beyond restarting a VM after host loss, vSphere HA VM Monitoring can restart a VM whose guest heartbeat fails. VM Monitoring could restart a member that is alive but briefly unresponsive, for example during a long GC pause, at the same moment GemFire's own failure detection is acting, producing conflicting recovery. If you enable HA, set VM Monitoring sensitivity conservatively, and ensure that the HA and `member-timeout` timings do not work against each other.
 
-#### **Risks and Operational Overhead** 
+#### Risks and Operational Overhead
 
 Enabling vSphere HA for infrastructure-level restart introduces specific risks and configuration overhead that you must own. Excluding GemFire VMs from HA avoids all of these risks, because exclusion leaves a single recovery authority.
 
@@ -455,7 +456,7 @@ Risks to account for:
 
 - Premature detection. An aggressive `member-timeout` can declare a loss during a transient stall, such as a GC pause or a vMotion stun, starting the recovery clock for a member that never actually left.
 
-**Configuration overhead you take on when HA is enabled:**
+### <a id="ha-config-overhead"></a> Configuration overhead you take on when HA is enabled
 
 - Set `redundant-copies` greater than 0 on all partitioned regions, so that a surviving secondary is promoted on failure with no data loss.
 

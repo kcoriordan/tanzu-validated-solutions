@@ -32,7 +32,7 @@ You can run `gfsh` as an interactive shell, or you can invoke `gfsh` from the OS
 
 The Tanzu GemFire Management Console is a browser-based console that streamlines day-to-day operations and provides visual insight across your GemFire estate. The console is delivered as a standalone application, either a JAR file that requires JDK 11, 17, or 21, or an OCI container image, and the console runs alongside your clusters rather than as part of them. The console is not a gfsh command. The console can manage an entire fleet of clusters, including multi-site (WAN) topologies, from a single interface.
 
-**Operations and management (write) capabilities**
+### <a id="gmc-operations"></a> Operations and management (write) capabilities
 
 - Monitor and manage multiple clusters, with a real-time multi-site topology view.
 
@@ -46,7 +46,8 @@ The Tanzu GemFire Management Console is a browser-based console that streamlines
 
 - Search and download member logs. See the note under Logging below.
 
-**Monitoring and observability (Tanzu GemFire 10.2 and 10.3)**  
+### <a id="gmc-monitoring"></a> Monitoring and observability (Tanzu GemFire 10.2 and 10.3)
+
 GMC drives its monitoring dashboards from Prometheus rather than by proxying metrics itself. The relevant 10.2 and 10.3 behavior:
 
 - **Metrics source.** Each member, locator or server, exposes its Prometheus metrics at the `/metrics` path on its HTTP service port, `http-service-port`, which defaults to 7070. This endpoint replaced the earlier per-member "metrics port" model used in 10.1 and earlier. Metric names are the GemFire statistics prefixed with `gemfire_`, for example, `gemfire_gets`.
@@ -63,10 +64,13 @@ GMC drives its monitoring dashboards from Prometheus rather than by proxying met
 
 The console is ideal for both routine operations and troubleshooting, providing an intuitive experience for administrators. For more information on GMC, refer to [Tanzu Management Console](https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire-management-console/1-4/gf-mc/index.html)
 
-**Logging**   
-GMC's Logs tab lets you view and download logs and statistics for the locators and servers of a connected cluster, with filtering by date range and log level. This tab is intended for development and troubleshooting, and this tab may be insufficient for trailing production logs. The logs themselves live on the member nodes. GMC reads the logs on demand rather than aggregating or retaining the logs. For production, forward member logs to an enterprise logging platform. 
+### <a id="gmc-logging"></a> Logging
 
-**Authentication modes**  
+GMC's Logs tab lets you view and download logs and statistics for the locators and servers of a connected cluster, with filtering by date range and log level. This tab is intended for development and troubleshooting, and this tab may be insufficient for trailing production logs. The logs themselves live on the member nodes. GMC reads the logs on demand rather than aggregating or retaining the logs. For production, forward member logs to an enterprise logging platform.
+
+### <a id="gmc-auth"></a> Authentication modes
+
 GMC supports NONE, meaning Developer Mode, OAuth2, LDAP, including LDAP over TLS/SSL, and SAML for multi-user access.  
+
 For more information on GMC, refer to the [Product Documentation](https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire-management-console/1-4/gf-mc/index.html)
 
