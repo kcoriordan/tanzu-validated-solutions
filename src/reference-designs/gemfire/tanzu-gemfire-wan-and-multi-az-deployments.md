@@ -1,7 +1,7 @@
 # Tanzu GemFire WAN and Multi-AZ Deployments
 Tanzu GemFire supports flexible deployment topologies to meet a variety of availability, latency and disaster recovery (DR) requirements. Two primary deployment models are commonly used: WAN replication for geographically distributed clusters and Multi-AZ deployments for fault-tolerant clusters within a single region.
 
-## WAN Replication (Geographical Level)
+## <a id="wan-replication"></a> WAN Replication (Geographical Level)
 WAN replication allows Tanzu GemFire clusters located in different geographic regions to exchange data asynchronously.  
 Each site runs as an independent GemFire cluster, with its own locators, servers, and regions, and uses Gateway Senders and Gateway Receivers to replicate events between clusters over a wide-area network. Use this model when sites are far enough apart that a single synchronous, or stretched, cluster is impractical. In practice, this means round-trip latency above the single-cluster ceiling described in Multi-AZ Deployment below, commonly tens of milliseconds or more between regions. Because WAN replication is asynchronous, local performance is unaffected by network latency.
 
@@ -29,7 +29,7 @@ Design considerations:
 
 * Use event conflation to optimize queue efficiency for high-throughput applications.
 
-## Multi-AZ Deployment (Local Cluster Level)
+## <a id="multi-az-deployment"></a> Multi-AZ Deployment (Local Cluster Level)
 A Multi-AZ deployment provides fault isolation and high availability within a single region or vSphere environment. Rather than separate clusters, all members belong to one logical cluster that spans multiple availability zones (AZs). Choose a Multi-AZ deployment when inter-zone latency is very low, because low latency allows synchronous redundancy without a performance penalty.
 
 Key characteristics:
@@ -72,7 +72,7 @@ Design considerations:
 
 * Validate failover regularly by simulating zone-level outages.
 
-## Configuring Redundancy Zones
+## <a id="redundancy-zones"></a> Configuring Redundancy Zones
 The `redundancy-zone` property explicitly maps a member to a physical zone or fault domain, ensuring that redundant copies of a partitioned region's data are placed in separate zones. This mapping protects against the simultaneous loss of both the primary and backup copies.
 
 Set the property in each member's `gemfire.properties`:

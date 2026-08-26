@@ -39,7 +39,7 @@ The following overview illustrates the logical architecture of VMware Tanzu GemF
 **Critical Architectural Constraint: Avoid Cross-Site Locator Lists:**
 Never configure clients with a combined list of locators spanning both regions simultaneously (for example, locators=locator-r01az01-IP[10334], locatos-r02az01-IP[10334]). Because GemFire native clients randomize locator addresses for initial load balancing, a dual-region configuration risks forcing healthy clients in Region 1 to connect to Region 2 servers during normal operations. This can cause severe cross-WAN latency and potential data divergence.
 
-## Key Components of Tanzu GemFire
+## <a id="key-components"></a> Key Components of Tanzu GemFire
 This section outlines the core components of Tanzu GemFire. Together, these components provide a distributed, in-memory data management platform optimized for high performance, dynamic scalability, and fault tolerance.
 
 **Tanzu GemFire Locators:**

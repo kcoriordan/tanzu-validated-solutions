@@ -1,9 +1,7 @@
 # Tanzu GemFire Management and Monitoring Tools
 Internally, Tanzu GemFire exposes its management and monitoring surface through Java MBeans, specifically MXBeans, that any JMX-compliant client can consume. On top of this foundation, GemFire provides several tools: the `gfsh` command-line interface, which is the primary administrative tool, the Tanzu GemFire Management Console (GMC), which is a browser-based operations console, a Prometheus metrics endpoint on each member, a management REST API, and out-of-the-box integration for observability.
 
-## 
-
-## gfsh Command-Line Tool
+## <a id="gfsh-tool"></a> gfsh Command-Line Tool
 The GemFire Shell (`gfsh`) is the recommended command-line interface for configuring, managing, and monitoring a cluster. `gfsh` lets you:
 
 * Start and stop locators and cache servers.
@@ -28,7 +26,7 @@ You can run `gfsh` as an interactive shell, or you can invoke `gfsh` from the OS
 
 * [Creating and Running gfsh Command Scripts](https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire/10-3/gf/tools_modules-gfsh-command_scripting.html)
 
-## Tanzu GemFire Management Console
+## <a id="management-console"></a> Tanzu GemFire Management Console
 The Tanzu GemFire Management Console is a browser-based console that streamlines day-to-day operations and provides visual insight across your GemFire estate. The console is delivered as a standalone application, either a JAR file that requires JDK 11, 17, or 21, or an OCI container image, and the console runs alongside your clusters rather than as part of them. The console is not a gfsh command. The console can manage an entire fleet of clusters, including multi-site (WAN) topologies, from a single interface.
 
 **Operations and management (write) capabilities**

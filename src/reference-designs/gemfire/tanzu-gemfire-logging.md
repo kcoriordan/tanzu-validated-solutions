@@ -25,7 +25,7 @@ If your own application or a third-party library uses a different front-end logg
 
 The full Log4j 2.18.0 distribution includes all three JARs. For more examples, see the Apache Log4j 2 Logging Services page ([https://logging.apache.org/log4j/2.x/](https://logging.apache.org/log4j/2.x/)) and the Log4j 2 FAQ ([https://logging.apache.org/log4j/2.x/faq.html](https://logging.apache.org/log4j/2.x/faq.html)).
 
-## Configuring Logging
+## <a id="configuring-logging"></a> Configuring Logging
 You can configure logging using:
 
 * The member's `gemfire.properties` file.
@@ -44,7 +44,7 @@ You can configure logging using:
 
 * Configure each member to log to its own file for easier debugging and log correlation.
 
-### Default Logging Properties
+### <a id="default-properties"></a> Default Logging Properties
 The following are the default GemFire logging properties:
 
 | Property | Description |
@@ -64,7 +64,7 @@ log-file-size-limit=0
 log-disk-space-limit=0
 ```
 
-### gfsh Logging
+### <a id="gfsh-logging"></a> gfsh Logging
 gfsh is the administrative client, not a cluster member. gfsh runs as a separate process on a workstation, jump host, or automation runner. gfsh connects to the cluster through a locator and, for management and monitoring commands, a JMX Manager member. gfsh logging records the client side of a session. This record includes the commands that you issue, the connection and authentication activity to the locator, JMX Manager, or HTTP management endpoint, and the stack traces of any commands that fail. gfsh logging is distinct from, and complementary to, the member logs, which record only cluster-side behavior.
 
 gfsh session logging is deactivated by default, because the shell is interactive and typically short-lived. Enable gfsh session logging when you need to examine the client side of a session. Typical cases include diagnosing why gfsh cannot connect to or authenticate with a secured or TLS-enabled JMX Manager or HTTP manager, debugging gfsh scripts that run non-interactively in automation or CI/CD pipelines, and keeping a record of the administrative commands that you issue from a shell. For ad hoc troubleshooting within a running shell, the `debug on` command activates verbose shell output for the current session without setting a system property.
@@ -77,7 +77,7 @@ export JAVA_ARGS=-Dgfsh.log-level=[severe|warning|info|config|fine|finer|finest]
 
 gfsh writes its log to the directory from which you launch gfsh, named in the format `gfsh-<unique>_<generation>.log`. For example, `gfsh-0_0.log`. Shells that you start concurrently in the same directory receive distinct file names. Because gfsh writes these files on the administrative host rather than on the GemFire nodes, collect them from the administrative host if you need to retain them.
 
-### Customizing Log4j 2 for Centralized Logging
+### <a id="customizing-log4j2"></a> Customizing Log4j 2 for Centralized Logging
 The `log-*` settings in `gemfire.properties` are a deliberately narrow interface. These settings configure GemFire's built-in `GeodeLogWriter` appender and control only the log level, file name, per-file size limit, and total disk-space limit. These settings write plain-text rolling files to each member's local disk. That model cannot forward logs off the host, emit structured output, set per-package log levels, or log asynchronously. Because GemFire is built directly on Apache Log4j 2, supplying your own `log4j2.xml` unlocks the full Log4j 2 feature set, which is what centralized, enterprise-grade logging requires. Advanced users who need that level of control, or who must integrate GemFire logging with the logging APIs of third-party libraries, should use this path.
 
 A custom `log4j2.xml` enables the capabilities that the property-based model does not provide:
@@ -140,7 +140,7 @@ When customizing `log4j2.xml`, observe these product-specific caveats from the G
 
 Use the default `log4j2.xml` in your GemFire distribution's `config` directory as the reference for any custom configuration. This forwarding path is the GemFire-side basis for production centralized logging. The Management Console's Logs tab suits quick, live inspection, while a custom `log4j2.xml` is what makes member logs durable, aggregated, and searchable off-host.
 
-### Integrating with Centralized Logging Systems
+### <a id="centralized-logging"></a> Integrating with Centralized Logging Systems
 To forward logs from all Tanzu GemFire members, locators and servers, to a centralized log server, for example rsyslog, perform the following steps:
 
 * Configure the Rsyslog Server

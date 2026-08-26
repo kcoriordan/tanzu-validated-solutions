@@ -1,13 +1,13 @@
 # Network Overview and Components
 This reference architecture builds its networking foundation on VMware vSphere Distributed Switch (VDS) and NSX-T Data Center. Together, these components provide a software-defined, scalable, and secure network fabric. This architecture combines the flexibility of NSX-T overlay networks with the logical segmentation capabilities of Projects and Virtual Private Clouds (VPCs), introduced in VMware Cloud Foundation 9.
 
-## vSphere Distributed Switch (VDS)
+## <a id="vds"></a> vSphere Distributed Switch (VDS)
 VDS provides the base network virtualization layer for vSphere clusters. VDS handles management, vMotion, and storage network traffic, and integrates with NSX-T for overlay transport and workload connectivity.
 
-## NSX-T Overlay Networking
+## <a id="nsx-t-overlay"></a> NSX-T Overlay Networking
 NSX-T overlay networking abstracts physical network boundaries, enabling logical segmentation, distributed routing, and micro-segmentation. NSX-T overlay networking supports east-west traffic optimization and simplifies network provisioning for Tanzu Platform components.
 
-### Projects in NSX-T
+### <a id="projects"></a> Projects in NSX-T
 Projects act as administrative and logical boundaries, allowing isolated environments for different tenants, workloads, or lifecycle stages. 
 
 * Key Concepts:
@@ -24,7 +24,7 @@ Projects act as administrative and logical boundaries, allowing isolated environ
 
 For more details on Projects in NSX-T, refer to [official documentation](https://techdocs.broadcom.com/us/en/vmware-cis/vcf/vcf-9-0-and-later/9-0/advanced-network-management/administration-guide/nsx-multi-tenancy/nsx-projects.html).
 
-### VPCs within Projects
+### <a id="vpcs"></a> VPCs within Projects
 Within each Project, VPCs provide self-contained, policy-driven network environments.  
 Each VPC encapsulates logical segments, routing, gateway configurations, and associated policies, enabling consistent isolation and governance across environments.
 

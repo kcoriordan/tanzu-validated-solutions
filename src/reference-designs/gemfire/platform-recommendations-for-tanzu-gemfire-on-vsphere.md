@@ -1,5 +1,7 @@
 # Platform Recommendations for Tanzu GemFire on vSphere
-## BIOS Settings
+This section provides platform-level recommendations for running Tanzu GemFire on vSphere, covering BIOS, virtual machine configuration, high availability, storage, and performance tuning.
+
+## <a id="bios-settings"></a> BIOS Settings
 For latency-sensitive, data-intensive workloads such as **Tanzu GemFire cache servers and locators**, ESXi host BIOS settings play a critical role in ensuring deterministic CPU behavior and minimizing jitter.
 
 | BIOS Category | Recommended Setting | Purpose |
@@ -13,10 +15,10 @@ For latency-sensitive, data-intensive workloads such as **Tanzu GemFire cache se
 
 *Note:* Settings may vary slightly depending on your hardware make and model. Use the settings above or equivalents as needed.
 
-## Virtual Machine Configuration Guidelines (GemFire Cache Servers & Locators)
+## <a id="vm-configuration"></a> Virtual Machine Configuration Guidelines (GemFire Cache Servers & Locators)
 The following configurations apply to GemFire VMs running in a vSphere environment. The following sections describe key points for performance tuning and configuration. For more details, see the [official documentation](https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire/10-2/gf/managing-monitor_tune-chapter_overview.html).
 
-### CPU and NUMA Configuration
+### <a id="cpu-numa"></a> CPU and NUMA Configuration
 Efficient CPU allocation is critical for stable and predictable Tanzu GemFire performance.
 
 * Enable hyper-threading and avoid CPU overcommitment to maintain consistent latency.
@@ -59,7 +61,7 @@ stealclock.enable = "TRUE"
 
 When this parameter is set, Tanzu GemFire records CPU steal time within its metrics, allowing operators to identify and mitigate host contention.
 
-### Memory Configuration
+### <a id="memory-configuration"></a> Memory Configuration
 Efficient memory allocation is critical for stable and predictable Tanzu GemFire performance.
 
 * Reserve full memory for each GemFire virtual machine to prevent ballooning or swapping.
@@ -113,7 +115,7 @@ If you retain G1GC, for example for storage efficiency on smaller heaps, start m
 
 
 
-### Low-Latency Workload Settings (vSphere Level)
+### <a id="low-latency-settings"></a> Low-Latency Workload Settings (vSphere Level)
 Apply the following on the GemFire VMs:
 
 * Use **VMXNET3** network adapters.
@@ -130,7 +132,7 @@ Apply the following on the GemFire VMs:
 
 
 
-### Operating System & Java Runtime Requirements
+### <a id="os-java-requirements"></a> Operating System & Java Runtime Requirements
 Supported Java versions for Tanzu GemFire 10.3. JDK 17 is the minimum and baseline version; the supported set is JDK 17, 21, and 25.
 
 | JDK | Recommended Version | Minimum Version |
@@ -156,7 +158,7 @@ To support high concurrency and I/O workloads, configure appropriate user and pr
 
 These limits prevent resource contention for GemFire threads, connections, and file handles under high concurrency.
 
-### JVM Recommendation per GemFire Virtual Machines
+### <a id="jvm-recommendation"></a> JVM Recommendation per GemFire Virtual Machines
 Each Tanzu GemFire cache server or locator should run as a single JVM instance inside a dedicated virtual machine. A strict **1:1:1 mapping of VM to JVM to GemFire member** provides the following benefits:
 
 * Eliminates resource contention between multiple JVMs.
@@ -169,7 +171,7 @@ Each Tanzu GemFire cache server or locator should run as a single JVM instance i
 
 If more capacity is needed, increase the JVM heap rather than adding a second JVM to the same VM. If increasing the heap is not an option, place the second JVM on a separate, newly created VM to preserve the 1:1:1 ratio and promote horizontal scalability.
 
-### Network & Time Synchronization Requirements
+### <a id="network-time-sync"></a> Network & Time Synchronization Requirements
 This section describes network adapter configuration, TCP tuning, NIC interrupt settings, and time synchronization requirements for Tanzu GemFire VMs deployed in vSphere.
 
 * Ensure consistent time across all GemFire nodes using NTP or chrony. Consistent time is critical for log correlation, WAN replication event ordering, and cluster membership.
@@ -292,7 +294,7 @@ To avoid locator or management endpoint failures:
 
 * Misconfigured host entries can break gfsh connectivity and management APIs.
 
-### NUMA and vNUMA Considerations for GemFireVMs
+### <a id="numa-vnuma"></a> NUMA and vNUMA Considerations for GemFireVMs
 GemFire cache servers are memory-intensive and latency-sensitive JVM processes. To avoid cross-NUMA memory access penalties, size each GemFire VM so that all of its vCPUs and memory fit within a single physical NUMA node of the ESXi host.
 
 Sizing VMs within NUMA boundaries ensures:
@@ -347,7 +349,7 @@ Results:
 
 This model is acceptable for large GemFire nodes that genuinely require high CPU or memory, but performance may become less predictable. Remaining within a single physical NUMA boundary is always preferred where possible.
 
-### NUMA-Aware Sizing and Placement Recommendations for GemFire Server Nodes
+### <a id="numa-sizing"></a> NUMA-Aware Sizing and Placement Recommendations for GemFire Server Nodes
 To achieve predictable low-latency performance, size GemFire VMs to maintain NUMA locality:
 
 * Deploy GemFire VMs so that their total vCPU count and memory footprint fit entirely within a single physical NUMA node of the ESXi host.
@@ -365,7 +367,7 @@ To achieve predictable low-latency performance, size GemFire VMs to maintain NUM
 | VM fits within a single NUMA node (vCPUs less than physical cores per node, and RAM less than node memory capacity) | VM is pinned to one NUMA node automatically | Shows one NUMA node | All memory allocated locally | Preferred for GemFire. No manual config needed. |
 | VM exceeds NUMA node CPU or memory limits | VM is split across multiple NUMA nodes and vNUMA is exposed | Multiple vNUMA nodes | Memory allocated per vNUMA node; cross-node access possible | Acceptable for large nodes; avoid unless necessary. |
 
-## vMotion, DRS and Snapshots
+## <a id="vmotion-drs-snapshots"></a> vMotion, DRS and Snapshots
 vSphere features such as vMotion, DRS and snapshots can introduce instability or latency spikes if not managed carefully.
 
 * Avoid automatic vMotion or DRS-triggered migrations for GemFire members. Set DRS to manual mode to prevent unplanned moves that affect transaction performance.
@@ -379,16 +381,16 @@ vSphere features such as vMotion, DRS and snapshots can introduce instability or
 * Best practice: treat GemFire nodes as stateful components, and avoid any operation, such as cloning or snapshotting, that interrupts runtime memory state.
 
 
-## vSphere High Availability (HA), Automatic Restart, and systemd
+## <a id="vsphere-ha"></a> vSphere High Availability (HA), Automatic Restart, and systemd
+This section covers the official recommendation for using vSphere HA with GemFire, along with the trade-offs if you choose to enable it.
 
-
-### **Official Recommendation {#vsphere-ha-official-recommendation}**
+### <a id="ha-recommendation"></a> **Official Recommendation**
 
 The Tanzu GemFire 10.3 performance guidance is explicit: deactivate vSphere High Availability (HA) on GemFire virtual machines. If the GemFire cluster runs on a dedicated cluster, deactivate HA across that cluster. If the cluster runs on a shared cluster, exclude the GemFire VMs from vSphere HA. In addition, define VM-to-VM anti-affinity rules so that the cluster never places members holding redundant copies of the same data on the same ESXi host.
 
 The rationale is that vSphere HA is an infrastructure-level mechanism with no knowledge of GemFire. vSphere HA does not understand redundant-copies settings, region types, that is, partitioned versus replicated and persistent versus non-persistent, the peer-to-peer distribution system and member roles, network-partition detection, or the internal recovery process, that is, secondary promotion, bucket rebalancing, and redundancy restoration. GemFire already provides application-level high availability through redundant copies. As a result, an HA-triggered VM restart can collide with GemFire's own recovery, produce a second rebalance, and introduce latency spikes. A restarted empty member also adds no data value if redundancy has already been restored on surviving members. For most deployments, the lowest-risk posture is therefore to exclude GemFire VMs from vSphere HA and rely on GemFire redundancy, persistence, and anti-affinity for availability.
 
-### Using vSphere HA (Supported, With Caveats)
+### <a id="using-vsphere-ha"></a> Using vSphere HA (Supported, With Caveats)
 Enabling vSphere HA for GemFire VMs is a deliberate trade-off rather than the default recommendation. Enabling vSphere HA can reduce mean time to repair for whole VM or host loss by rapidly restarting a failed VM on a surviving host, but this restart only helps if you configure the cluster to tolerate and coordinate it. If your operational goal is infrastructure-level VM restart in addition to GemFire's own redundancy, apply the following GemFire-side configuration:
 
 * Set `redundant-copies` greater than 0 on all partitioned regions, so that a surviving secondary is promoted to primary on failure and no data is lost for that portion of the dataset.
@@ -455,11 +457,11 @@ Risks to account for:
 
 * Monitor redundancy state so that an operator can see when the cluster is in the exposed window and when the cluster has fully recovered. Run any deliberate rebalance in a controlled, off-peak window rather than letting cascading recovery activity land during business hours.
 
-### Summary Recommendation
+### <a id="summary-recommendation"></a> Summary Recommendation
 The product-default and lowest-risk posture is to exclude GemFire VMs from vSphere HA and rely on GemFire redundant-copies, region persistence, and VM-to-VM anti-affinity, using systemd to restart members automatically after planned VM reboots.   
 If HA is enabled for infrastructure-level restart, retain redundancy, persistence, and anti-affinity, run each member under systemd, and set `recovery-delay` to span the measured restart window, accepting the risks and operational overhead above as the trade-off.
 
-## Storage Configuration
+## <a id="storage-configuration"></a> Storage Configuration
 For optimal I/O performance, follow these storage best practices:
 
 * Use the PVSCSI adapter for all GemFire VMs handling persistence or write-heavy workloads.
@@ -476,7 +478,7 @@ For optimal I/O performance, follow these storage best practices:
 
 
 
-## Performance Tuning for GemFire on VMware vSphere
+## <a id="performance-tuning"></a> Performance Tuning for GemFire on VMware vSphere
 The following table provides a high-level overview of the best configurations for hosting GemFire instances on the VCF Platform. For more details, see the [official documentation](https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire/10-3/gf/managing-monitor_tune-chapter_overview.html) and the vSphere best practices [white paper](https://www.vmware.com/docs/perf-latency-tuning-vsphere8).
 
 | Setting/Feature | Description | GemFire Impact & Recommendation |

@@ -17,7 +17,7 @@ Configuration, lifecycle management, and scaling considerations for core VCF com
 For context, this document includes a high-level overview of the underlying vSphere platform components to illustrate the integration points for Tanzu GemFire within VCF 9.
 
 
-## Bill Of Materials (BOM)
+## <a id="bill-of-materials"></a> Bill Of Materials (BOM)
 | Component | Version / Requirement | Notes |
 |---|---|---|
 | VMware vSphere | Minimum: VMware vSphere Foundation (VVF) 9. Supported: VMware Cloud Foundation (VCF) 9 | Required for compute virtualization, networking, HA, and DRS |

@@ -57,7 +57,7 @@ In addition to failure resilience, the architecture supports scalability, allowi
 
    Asynchronous WAN replication, a native capability in GemFire, replicates data from Region 1 to Region 2.
 
-## Key Features of Tanzu GemFire
+## <a id="key-features"></a> Key Features of Tanzu GemFire
 * **High Read-and-Write Throughput**: Tanzu GemFire supports high throughput with fast data access, thanks to concurrent memory structures and optimized distribution. Data can be replicated or partitioned across systems to improve read and write speeds. This setup boosts overall throughput, with limits only dependent on network capacity.
 
 * **Low and Predictable Latency**: With a streamlined caching layer, Tanzu GemFire minimizes delays by reducing context switches between threads. Data is efficiently distributed, and subscription management ensures better CPU and bandwidth usage, resulting in faster response times and lower latency.

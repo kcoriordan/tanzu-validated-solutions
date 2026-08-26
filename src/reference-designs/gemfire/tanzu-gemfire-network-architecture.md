@@ -1,7 +1,7 @@
 # Tanzu GemFire Network Architecture
 The network architecture for Tanzu GemFire on VMware Cloud Foundation (VCF) 9 builds on modern NSX constructs such as Projects, Virtual Private Clouds (VPCs), and optionally the NSX Advanced Load Balancer (NSX ALB) to deliver a secure, scalable, and multi-tenant-ready design. Dedicated resource pools are created for GemFire components so that resources stay clearly separated and the deployment remains easy to operate.
 
-## ![image5](./images/image5.png)
+![image5](./images/image5.png)
 
 You can deploy Tanzu GemFire clusters on VLAN-backed portgroups. However, this architecture uses NSX Overlay networks exclusively to maximize cloud-native agility and security.
 
@@ -38,7 +38,7 @@ You can create three types of overlay network within a VPC:
 
 * "Public" here means northbound-routable, not necessarily internet-facing.
 
-## Supported Network Topologies
+## <a id="network-topologies"></a> Supported Network Topologies
 The network diagram shows that GemFire clusters can be placed on three distinct network scopes: Private VPC segments, Project-level TGW segments, or northbound-routable Public segments.
 
 * Project 1 in the diagram shows GemFire clusters deployed on Private VPC or TGW networks.
@@ -58,7 +58,7 @@ This section explains how GemFire operates across the three supported network to
 
 
 
-### Tanzu GemFire on VPC private segments (single-VPC scope)
+### <a id="vpc-private-segments"></a> Tanzu GemFire on VPC private segments (single-VPC scope)
 Use VPC Private segments when all GemFire components, including Locators, Cache Servers, Gateway Senders, Gateway Receivers, and clients, belong to a single cluster that operates entirely inside one VPC. The VPC Gateway routes these segments only within the VPC. The VPC Gateway does not advertise their prefixes to the TGW or the Tier-0, so the segments remain fully isolated within that VPC's routing domain.
 
 When to use:
@@ -69,7 +69,7 @@ When to use:
 
 * You cannot use Private VPC prefixes for external WAN replication. Their routes never leave the VPC Gateway, so they can never reach remote Gateway Receivers or remote Locators.
 
-### Tanzu GemFire on Private TGW Segments (Project scope, multi-VPC)
+### <a id="private-tgw-segments"></a> Tanzu GemFire on Private TGW Segments (Project scope, multi-VPC)
 Use Private TGW segments when GemFire clusters or remote GemFire clients span multiple VPCs within the same NSX Project. TGW segments provide L3 connectivity across every VPC attached to the same Transit Gateway while remaining isolated to that Project.
 
 When to use:
@@ -86,7 +86,7 @@ WAN Replication Characteristics:
 
 * The TGW does not advertise its prefixes outside the Project, so you cannot use them for cross-Project replication, cross-Region replication, or any topology requiring northbound L3 routing. For those cases, use Public segments.
 
-### Tanzu GemFire on Northbound-Routable Public Segments (inter-Project / inter-Region)
+### <a id="public-segments"></a> Tanzu GemFire on Northbound-Routable Public Segments (inter-Project / inter-Region)
 Host all GemFire components on Public VPC networks when remote GemFire clients fall outside the current NSX Project, or when GemFire peers live on a different NSX overlay zone or NSX Manager. Examples include another Project, another VCF Region, or a physical L3 domain.
 
 The VPC Gateway advertises Public prefixes to the TGW, then to the centralized Tier-0, which exports the prefixes to uplink L3. This design makes GemFire member IPs reachable across WAN, MPLS, VPN, and inter-DC paths without NAT. GemFire intra-cluster and WAN communication has a hard requirement for this reachability.
@@ -107,7 +107,7 @@ WAN Replication Characteristics:
 
 * This design gives a clean, direct L3 route between all GemFire members participating in WAN replication, meeting GemFire's requirement for end-to-end local IP reachability.
 
-## Generic Network Recommendations
+## <a id="network-recommendations"></a> Generic Network Recommendations
 GemFire clusters can be hosted on any of the overlay networks above. Regardless of the chosen network, follow these recommendations.
 
 **Segment placement**
@@ -150,7 +150,7 @@ GemFire clusters can be hosted on any of the overlay networks above. Regardless 
 
   Buffers should be at least as large as your largest stored object plus its key and approximately 100 bytes of header overhead. The system rejects requests above the OS limit at startup, so coordinate with your platform team on OS buffer maximums.
 
-### Network Recommendations for WAN replication within a single region
+### <a id="wan-single-region"></a> Network Recommendations for WAN replication within a single region
 
 * **Primary and secondary Tanzu GemFire clusters in the same VPC**
 
@@ -166,7 +166,7 @@ GemFire clusters can be hosted on any of the overlay networks above. Regardless 
 
   The clusters can reside in different AZs and vSphere clusters, but they still share a common underlay and Project-level routing domain, which satisfies GemFire's requirement for direct IP reachability between WAN peers.
 
-### Network Recommendations for WAN replication across multiple regions
+### <a id="wan-multi-region"></a> Network Recommendations for WAN replication across multiple regions
 
 * In a multi-Region VCF topology, each Region has its own NSX Manager and overlay control plane, so overlay segments do not stretch between Regions. As a result, GemFire local IPs from Region A are not natively routable in Region B.
 
@@ -195,7 +195,7 @@ Based on the preceding recommendations and topology options, the following table
 | Network quality for WAN links | Design WAN paths with sufficient bandwidth and low, predictable latency between regions/cluster sites. | WAN replication throughput and queue drain time are directly affected by RTT, jitter, and available bandwidth. | Critical for keeping secondary clusters current, minimizing lag and recovery time in failover scenarios.  |
 | NSX and overlay use | Use NSX VPC/Projects, VPC Gateways, and TGW as the routing fabric; central T0 provides north-south connectivity. | Aligns with VCF 9 VPC model (VPC Gateway to TGW to centralized T0), and keeps GemFire traffic within well-defined routing domains. | Ensures that GemFire clusters can be placed flexibly across AZs/VPCs while maintaining supported network semantics.  |
 
-## Monitoring and Metrics Exposure (Prometheus)
+## <a id="monitoring-metrics"></a> Monitoring and Metrics Exposure (Prometheus)
 The **Tanzu GemFire Management Console (GMC)** provides monitoring for this architecture. GMC is a standalone web application, distributed as a JAR or OCI image. GMC runs alongside the clusters and integrates with a Prometheus server to drive its monitoring dashboards.
 
 Beginning with **GemFire 10.2**, the metrics architecture changed, and this change has a direct firewall and port impact:
@@ -210,7 +210,7 @@ Beginning with **GemFire 10.2**, the metrics architecture changed, and this chan
 
 **Firewall implications:** the monitoring path requires that the Prometheus server, or GMC's embedded Prometheus, reach **every** GemFire member on `http-service-port` (7070). This requirement applies in addition to any existing REST or management use of port 7070. The `/metrics` traffic is HTTP(S), and you must not NAT it away from the member's real IP, since Prometheus targets the members directly.
 
-## Firewall Requirements for Tanzu GemFire
+## <a id="firewall-requirements"></a> Firewall Requirements for Tanzu GemFire
 The following table lists the minimum firewall rules needed to support communication between components in the architecture.
 
 Note: The following firewall requirements assume that all GemFire components are on a single network. If your design uses multiple networks or DFW, refer to the next section, [Port Configuration for Tanzu GemFire](#port-configuration-for-tanzu-gemfire).
@@ -241,7 +241,7 @@ In this role, GSLB acts purely as an intelligent DNS router. GSLB resolves the c
 
 GSLB is optional. A manual DNS override or application-level configuration achieves the same client-side result. NSX ALB's own management-plane connectivity, including vCenter, AD/LDAP, and Service Engine lifecycle, is out of scope for GemFire documentation.
 
-## Port Configuration for Tanzu GemFire
+## <a id="port-configuration"></a> Port Configuration for Tanzu GemFire
 If your environment uses segmented networks or DFW, ensure the following port configurations are in place for Tanzu GemFire to function correctly. Defaults below reflect Tanzu GemFire 10.3.
 
 | Name | Source to Destination | Protocol | Default | Configuration | Description |
