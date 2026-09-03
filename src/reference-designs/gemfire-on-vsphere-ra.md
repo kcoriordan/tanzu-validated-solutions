@@ -1,6 +1,6 @@
-# Deploy and Manage VMware Tanzu GemFire on vSphere
+# Tanzu GemFire on VMware Cloud Foundation
 
-The *Deploy and Manage VMware Tanzu GemFire on vSphere* reference architecture describes the deployment and management of VMware Tanzu GemFire on self-managed, multi-region vSphere infrastructure. The reference architecture uses a vSphere Distributed Switch (vDS) for network virtualization and NSX Advanced Load Balancer for traffic distribution and high availability. This reference architecture provides architectural best practices, deployment strategies, and operational recommendations to support a Tanzu GemFire deployment that is scalable, high-performance, and fault-tolerant. These recommendations apply to an enterprise-grade vSphere environment.
+The *Tanzu GemFire on VMware Cloud Foundation* reference architecture describes the deployment and management of VMware Tanzu GemFire on self-managed, multi-region vSphere infrastructure. The reference architecture uses a vSphere Distributed Switch (vDS) for network virtualization and NSX Advanced Load Balancer for traffic distribution and high availability. This reference architecture provides architectural best practices, deployment strategies, and operational recommendations to support a Tanzu GemFire deployment that is scalable, high-performance, and fault-tolerant. These recommendations apply to an enterprise-grade vSphere environment.
 
 ## <a id="intended-audience"></a> Intended Audience
 

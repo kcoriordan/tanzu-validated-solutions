@@ -10,34 +10,34 @@ You can create three types of overlay network within a VPC:
 
 1. VPC Private Networks (Private VPC Segments)
 
-- Scope: a single VPC only.
+   - Scope: a single VPC only.
 
-- Routing: The VPC Gateway isolates these networks. The VPC Gateway does not advertise their prefixes to Transit Gateways (TGW) or Tier-0 Routers.
+   - Routing: The VPC Gateway isolates these networks. The VPC Gateway does not advertise their prefixes to Transit Gateways (TGW) or Tier-0 Routers.
 
-- East-west domain: confined to that VPC.
+   - East-west domain: confined to that VPC.
 
-- Not reachable from other VPCs or Regions.
+   - Not reachable from other VPCs or Regions.
 
 2. Private TGW Networks (Project Shared Networks)
 
-- Scope: shared within a Project across multiple VPCs.
+   - Scope: shared within a Project across multiple VPCs.
 
-- Routing: The Transit Gateway (TGW) connects the VPC Gateways of every VPC in the same Project.
+   - Routing: The Transit Gateway (TGW) connects the VPC Gateways of every VPC in the same Project.
 
-- Not advertised outside the Project, and not leaked to the Tier-0 or upstream networks.
+   - Not advertised outside the Project, and not leaked to the Tier-0 or upstream networks.
 
-- Ideal for intra-Project communication across multiple VPCs.
+   - Ideal for intra-Project communication across multiple VPCs.
 
 3. Northbound-Routable Public Networks (Public VPC Segments)
 
-- Scope: a VPC network with upstream reachability.
+   - Scope: a VPC network with upstream reachability.
 
-- Routed path:  
-  Segment → VPC Gateway → TGW → T0 Gateway → Uplink L3
+   - Routed path:  
+     Segment → VPC Gateway → TGW → T0 Gateway → Uplink L3
 
-- Reachability: The Tier-0 exports these prefixes northbound to L3 networks, for example WAN, MPLS, or VPN.
+   - Reachability: The Tier-0 exports these prefixes northbound to L3 networks, for example WAN, MPLS, or VPN.
 
-- "Public" here means northbound-routable, not necessarily internet-facing.
+   - "Public" here means northbound-routable, not necessarily internet-facing.
 
 ## <a id="network-topologies"></a> Supported Network Topologies
 

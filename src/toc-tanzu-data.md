@@ -3,7 +3,7 @@
 This is the table of contents for the **Tanzu Data** *Reference Architecture* documentation.
 
 - [Tanzu Data Reference Architecture](./reference-designs/index-tanzu-data.md)
-  - [Deploy and Manage Tanzu GemFire on vSphere](./reference-designs/gemfire-on-vsphere-ra.md)
+  - [Tanzu GemFire on VMware Cloud Foundation](./reference-designs/gemfire-on-vsphere-ra.md)
       - [Executive Summary](./reference-designs/gemfire/executive-summary.md)
       - [VCF Design Blueprints and Deployment Topologies](./reference-designs/gemfire/vcf-design-blueprints-and-deployment-topologies.md)
       - [Network Overview and Components](./reference-designs/gemfire/network-overview-and-components.md)
